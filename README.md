@@ -1,0 +1,1 @@
+# Terraform healthchecks.io Provider
