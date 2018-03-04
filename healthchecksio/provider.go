@@ -19,7 +19,7 @@ func Provider() *schema.Provider {
 		},
 
 		ResourcesMap: map[string]*schema.Resource{
-			"healthchecksio_check": resourceCheck(),
+			"healthchecksio_check": resourceHealthcheck(),
 		},
 
 		ConfigureFunc: providerConfigure,

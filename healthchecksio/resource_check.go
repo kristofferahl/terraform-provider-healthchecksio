@@ -9,12 +9,12 @@ import (
 	"github.com/kristofferahl/go-healthchecksio"
 )
 
-func resourceCheck() *schema.Resource {
+func resourceHealthcheck() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceCheckCreate,
-		Read:   resourceCheckRead,
-		Update: resourceCheckUpdate,
-		Delete: resourceCheckDelete,
+		Create: resourceHealthcheckCreate,
+		Read:   resourceHealthcheckRead,
+		Update: resourceHealthcheckUpdate,
+		Delete: resourceHealthcheckDelete,
 
 		Schema: map[string]*schema.Schema{
 			"name": &schema.Schema{
@@ -30,7 +30,7 @@ func resourceCheck() *schema.Resource {
 	}
 }
 
-func resourceCheckCreate(d *schema.ResourceData, m interface{}) error {
+func resourceHealthcheckCreate(d *schema.ResourceData, m interface{}) error {
 	client := m.(*healthchecksio.Client)
 
 	name := d.Get("name").(string)
@@ -50,10 +50,10 @@ func resourceCheckCreate(d *schema.ResourceData, m interface{}) error {
 
 	d.SetId(resp.ID())
 
-	return resourceCheckRead(d, m)
+	return resourceHealthcheckRead(d, m)
 }
 
-func resourceCheckRead(d *schema.ResourceData, m interface{}) error {
+func resourceHealthcheckRead(d *schema.ResourceData, m interface{}) error {
 	client := m.(*healthchecksio.Client)
 
 	key := d.Id()
@@ -83,7 +83,7 @@ func resourceCheckRead(d *schema.ResourceData, m interface{}) error {
 	return nil
 }
 
-func resourceCheckUpdate(d *schema.ResourceData, m interface{}) error {
+func resourceHealthcheckUpdate(d *schema.ResourceData, m interface{}) error {
 	client := m.(*healthchecksio.Client)
 
 	key := d.Id()
@@ -106,7 +106,7 @@ func resourceCheckUpdate(d *schema.ResourceData, m interface{}) error {
 	return nil
 }
 
-func resourceCheckDelete(d *schema.ResourceData, m interface{}) error {
+func resourceHealthcheckDelete(d *schema.ResourceData, m interface{}) error {
 	client := m.(*healthchecksio.Client)
 
 	key := d.Id()
