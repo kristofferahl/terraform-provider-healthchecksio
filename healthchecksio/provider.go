@@ -1,8 +1,6 @@
 package healthchecksio
 
 import (
-	"os"
-
 	"github.com/hashicorp/terraform/helper/schema"
 )
 
@@ -13,7 +11,7 @@ func Provider() *schema.Provider {
 			"api_key": &schema.Schema{
 				Type:        schema.TypeString,
 				Required:    true,
-				DefaultFunc: envDefaultFunc(EnvironmentKey),
+				DefaultFunc: schema.EnvDefaultFunc(EnvironmentKey, nil),
 				Description: "A healthchecks.io api key.",
 			},
 		},
@@ -31,18 +29,4 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 		APIKey: d.Get("api_key").(string),
 	}
 	return config.Client()
-}
-
-func envDefaultFunc(k string) schema.SchemaDefaultFunc {
-	return func() (interface{}, error) {
-		if v := os.Getenv(k); v != "" {
-			if v == "true" {
-				return true, nil
-			} else if v == "false" {
-				return false, nil
-			}
-			return v, nil
-		}
-		return nil, nil
-	}
 }
