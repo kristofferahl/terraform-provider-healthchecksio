@@ -1,1 +1,1 @@
-# Terraform healthchecks.io Provider
+# Terraform Provider for healthchecks.io
