@@ -17,7 +17,7 @@ type Config struct {
 }
 
 // Client returns a configured healthchecksio client
-func (c *Config) Client() (*healthchecksio.Client, error) {
+func (c *Config) Client() (interface{}, error) {
 	client := healthchecksio.NewClient(c.APIKey)
 
 	log.Print("[INFO] healthchecks.io client configured")
