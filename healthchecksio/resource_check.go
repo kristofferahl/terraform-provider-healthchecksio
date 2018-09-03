@@ -33,6 +33,11 @@ func resourceHealthcheck() *schema.Resource {
 				Description: "Schedule defining the healthcheck",
 				Optional:    true,
 			},
+			"timezone": &schema.Schema{
+				Type:        schema.TypeString,
+				Description: "Timezone used for the schedule",
+				Optional:    true,
+			},
 		},
 	}
 }
@@ -87,6 +92,7 @@ func resourceHealthcheckRead(d *schema.ResourceData, m interface{}) error {
 	d.Set("name", healthcheck.Name)
 	d.Set("tags", strings.Split(healthcheck.Tags, " "))
 	d.Set("schedule", healthcheck.Schedule)
+	d.Set("timezone", healthcheck.Timezone)
 
 	return nil
 }
@@ -104,7 +110,7 @@ func resourceHealthcheckUpdate(d *schema.ResourceData, m interface{}) error {
 
 	log.Printf("[DEBUG] healthcheck update: %#v", healthcheck)
 
-	if d.HasChange("tags") || d.HasChange("schedule") {
+	if d.HasChange("tags") || d.HasChange("schedule") || d.HasChange("timezone") {
 		_, err = client.Update(key, *healthcheck)
 		if err != nil {
 			return fmt.Errorf("Failed to update healthcheck: %s", err)
@@ -141,6 +147,10 @@ func createHealthcheckFromResourceData(d *schema.ResourceData) (*healthchecksio.
 
 	if attr, ok := d.GetOk("schedule"); ok {
 		healthcheck.Schedule = attr.(string)
+	}
+
+	if attr, ok := d.GetOk("timezone"); ok {
+		healthcheck.Timezone = attr.(string)
 	}
 
 	return &healthcheck, nil
