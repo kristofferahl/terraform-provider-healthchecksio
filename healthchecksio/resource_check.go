@@ -28,6 +28,11 @@ func resourceHealthcheck() *schema.Resource {
 				Optional:    true,
 				Elem:        &schema.Schema{Type: schema.TypeString},
 			},
+			"grace": &schema.Schema{
+				Type:        schema.TypeInt,
+				Description: "Grace period for the healthcheck",
+				Optional:    true,
+			},
 			"schedule": &schema.Schema{
 				Type:        schema.TypeString,
 				Description: "Schedule defining the healthcheck",
@@ -91,6 +96,7 @@ func resourceHealthcheckRead(d *schema.ResourceData, m interface{}) error {
 
 	d.Set("name", healthcheck.Name)
 	d.Set("tags", strings.Split(healthcheck.Tags, " "))
+	d.Set("grace", healthcheck.Grace)
 	d.Set("schedule", healthcheck.Schedule)
 	d.Set("timezone", healthcheck.Timezone)
 
@@ -110,7 +116,7 @@ func resourceHealthcheckUpdate(d *schema.ResourceData, m interface{}) error {
 
 	log.Printf("[DEBUG] healthcheck update: %#v", healthcheck)
 
-	if d.HasChange("tags") || d.HasChange("schedule") || d.HasChange("timezone") {
+	if d.HasChange("tags") || d.HasChange("grace") || d.HasChange("schedule") || d.HasChange("timezone") {
 		_, err = client.Update(key, *healthcheck)
 		if err != nil {
 			return fmt.Errorf("Failed to update healthcheck: %s", err)
@@ -143,6 +149,10 @@ func createHealthcheckFromResourceData(d *schema.ResourceData) (*healthchecksio.
 	if attr, ok := d.GetOk("tags"); ok {
 		tags := toSliceOfString(attr.([]interface{}))
 		healthcheck.Tags = strings.Join(tags, " ")
+	}
+
+	if attr, ok := d.GetOk("grace"); ok {
+		healthcheck.Grace = attr.(int)
 	}
 
 	if attr, ok := d.GetOk("schedule"); ok {
