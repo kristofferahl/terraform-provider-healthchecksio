@@ -122,7 +122,7 @@ func resourceHealthcheckUpdate(d *schema.ResourceData, m interface{}) error {
 
 	log.Printf("[DEBUG] healthcheck update: %#v", healthcheck)
 
-	if d.HasChange("tags") || d.HasChange("timeout") || d.HasChange("grace") || d.HasChange("schedule") || d.HasChange("timezone") {
+	if hasChange(d) {
 		_, err = client.Update(key, *healthcheck)
 		if err != nil {
 			return fmt.Errorf("Failed to update healthcheck: %s", err)
@@ -185,4 +185,10 @@ func toSliceOfString(a []interface{}) []string {
 		}
 	}
 	return vs
+}
+
+func hasChange(d *schema.ResourceData) bool {
+	return d.HasChange("tags") || d.HasChange("timeout") ||
+		d.HasChange("grace") || d.HasChange("schedule") ||
+		d.HasChange("timezone")
 }
