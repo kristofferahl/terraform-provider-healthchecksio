@@ -101,7 +101,11 @@ func resourceHealthcheckRead(d *schema.ResourceData, m interface{}) error {
 	}
 
 	d.Set("name", healthcheck.Name)
-	d.Set("tags", strings.Split(healthcheck.Tags, " "))
+	if len(healthcheck.Tags) > 0 {
+		d.Set("tags", strings.Split(healthcheck.Tags, " "))
+	} else {
+		d.Set("tags", make([]string, 0))
+	}
 	d.Set("timeout", healthcheck.Timeout)
 	d.Set("grace", healthcheck.Grace)
 	d.Set("schedule", healthcheck.Schedule)
@@ -130,7 +134,7 @@ func resourceHealthcheckUpdate(d *schema.ResourceData, m interface{}) error {
 		}
 	}
 
-	return nil
+	return resourceHealthcheckRead(d, m)
 }
 
 func resourceHealthcheckDelete(d *schema.ResourceData, m interface{}) error {
