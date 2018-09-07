@@ -37,6 +37,7 @@ func resourceHealthcheck() *schema.Resource {
 				Type:        schema.TypeInt,
 				Description: "Grace period for the healthcheck",
 				Optional:    true,
+				Default:     3600,
 			},
 			"schedule": &schema.Schema{
 				Type:        schema.TypeString,
