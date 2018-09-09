@@ -30,3 +30,11 @@ resource "healthchecksio_check" "test" {
 ```
 
 More examples can be found in the [examples directory](./examples).
+
+## Import
+
+Checks can be imported using the uuid, e.g.
+
+```
+$ terraform import healthchecksio_check.my_first_check 760ca858-576a-432b-8b1f-378049d7ce96
+```
