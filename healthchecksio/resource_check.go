@@ -15,6 +15,9 @@ func resourceHealthcheck() *schema.Resource {
 		Read:   resourceHealthcheckRead,
 		Update: resourceHealthcheckUpdate,
 		Delete: resourceHealthcheckDelete,
+		Importer: &schema.ResourceImporter{
+			State: schema.ImportStatePassthrough,
+		},
 
 		Schema: map[string]*schema.Schema{
 			"name": &schema.Schema{
