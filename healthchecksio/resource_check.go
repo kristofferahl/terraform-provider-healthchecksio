@@ -52,6 +52,11 @@ func resourceHealthcheck() *schema.Resource {
 				Description: "Timezone used for the schedule",
 				Optional:    true,
 			},
+			"channels": &schema.Schema{
+				Type:        schema.TypeString,
+				Description: "Channels integrated with the healthcheck",
+				Optional:    true,
+			},
 		},
 	}
 }
@@ -113,6 +118,7 @@ func resourceHealthcheckRead(d *schema.ResourceData, m interface{}) error {
 	d.Set("grace", healthcheck.Grace)
 	d.Set("schedule", healthcheck.Schedule)
 	d.Set("timezone", healthcheck.Timezone)
+	d.Set("channels", healthcheck.Channels)
 
 	return nil
 }
@@ -181,6 +187,10 @@ func createHealthcheckFromResourceData(d *schema.ResourceData) (*healthchecksio.
 		healthcheck.Timezone = attr.(string)
 	}
 
+	if attr, ok := d.GetOk("channels"); ok {
+		healthcheck.Channels = attr.(string)
+	}
+
 	return &healthcheck, nil
 }
 
@@ -198,5 +208,5 @@ func toSliceOfString(a []interface{}) []string {
 func hasChange(d *schema.ResourceData) bool {
 	return d.HasChange("tags") || d.HasChange("timeout") ||
 		d.HasChange("grace") || d.HasChange("schedule") ||
-		d.HasChange("timezone")
+		d.HasChange("timezone") || d.HasChange("channels")
 }
