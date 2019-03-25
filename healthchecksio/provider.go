@@ -16,6 +16,10 @@ func Provider() *schema.Provider {
 			},
 		},
 
+		DataSourcesMap: map[string]*schema.Resource{
+			"healthchecksio_channel": dataSourceHealthcheckChannel(),
+		},
+
 		ResourcesMap: map[string]*schema.Resource{
 			"healthchecksio_check": resourceHealthcheck(),
 		},
