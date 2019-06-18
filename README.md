@@ -106,3 +106,8 @@ This command runs the integration tests against multiple versions of Terraform d
 ```bash
 ./run release
 ```
+
+## Contributors
+- [masutaka](https://github.com/masutaka)
+- [kristofferahl](https://github.com/kristofferahl)
+- [rossmckelvie](https://github.com/rossmckelvie)
