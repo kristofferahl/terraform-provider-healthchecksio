@@ -53,7 +53,10 @@ func resourceHealthcheck() *schema.Resource {
 				Optional:    true,
 			},
 			"channels": &schema.Schema{
-				Type:        schema.TypeString,
+				Type: schema.TypeList,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
 				Description: "Channels integrated with the healthcheck",
 				Optional:    true,
 			},
@@ -188,7 +191,8 @@ func createHealthcheckFromResourceData(d *schema.ResourceData) (*healthchecksio.
 	}
 
 	if attr, ok := d.GetOk("channels"); ok {
-		healthcheck.Channels = attr.(string)
+		channels := toSliceOfString(attr.([]interface{}))
+		healthcheck.Channels = strings.Join(channels, ",")
 	}
 
 	return &healthcheck, nil
