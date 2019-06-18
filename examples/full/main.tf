@@ -1,11 +1,5 @@
 provider "healthchecksio" {
-  api_key = var.healthchecks_io_api_key
   version = "~> 1.3"
-}
-
-variable "healthchecks_io_api_key" {
-  type        = string
-  description = "API Key. tfvars can't be used here, to keep secrets out of code first set environment TF_VAR_healthchecks_io_api_key"
 }
 
 resource "healthchecksio_check" "test" {

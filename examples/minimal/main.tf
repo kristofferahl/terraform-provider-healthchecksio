@@ -1,5 +1,5 @@
 provider "healthchecksio" {
-  api_key = "abc123"
+  version = "~> 1.3"
 }
 
 resource "healthchecksio_check" "bare_minimum" {
