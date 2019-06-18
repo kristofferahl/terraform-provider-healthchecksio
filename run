@@ -1,0 +1,131 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+declare -r plugins_dir=".terraform/plugins"
+declare -r dist_dir="${PWD:?}/dist"
+declare -r examples_dir="${PWD:?}/examples"
+declare -r test_dir="${PWD:?}/test"
+
+function log() {
+  local -r level="${1}"
+  local -r message="$2"
+  local -r timestamp=$(date +"%Y-%m-%d %H:%M:%S")
+  local -r script_name="$(basename "$0")"
+  echo >&2 -e "${timestamp} [\033[1;94m${level}\033[0m] [$script_name] ${message}"
+}
+
+install_plugin() {
+  local destination_dir="${1:?'A destination directory is required'}"
+  log INF "Installing plugin (src=${dist_dir:?} dest=${destination_dir:?})"
+  [[ ! -d "${dist_dir:?}" ]] && log ERR "Source directory not found (${dist_dir:?})" && exit 1
+  rm -rf "${destination_dir:?}/${plugins_dir:?}" &>/dev/null || true
+  mkdir -p "${destination_dir:?}/${plugins_dir:?}" &>/dev/null || true
+  cp -R "${dist_dir:?}/." "${destination_dir:?}/${plugins_dir:?}"
+}
+
+run_help() {
+  echo "usage: ./run <command> [<arg1> <arg2> ...]
+
+commands:
+  build               Build the provider
+  examples            Run examples
+  test                Run tests
+  test-docker         Run integration tests in docker
+  test-integration    Run integration tests
+  release             Create a new release of the provider"
+}
+
+run_build() {
+  log INF 'Cross-compiling using goreleaser...'
+  goreleaser --snapshot --skip-publish --skip-validate --rm-dist
+}
+
+run_release() {
+  log INF 'Creating a release using goreleaser...'
+  goreleaser --rm-dist
+}
+
+run_examples() {
+  [ "${HEALTHCHECKSIO_API_KEY:?'Environment variable "HEALTHCHECKSIO_API_KEY" is required'}" ]
+
+  local example="${1:-}"
+
+  log INF "Running example(s)..."
+
+  for d in ${examples_dir:?}/**; do
+    if [[ -d "${d}" ]]; then
+      [[ "$(basename "${d:?}")" != "${example}" && "${example}" != "" ]] && continue
+
+      log INF "Example: $(basename "${d:?}") (${d:?})"
+
+      install_plugin "${d:?}"
+      cd "${d:?}" || exit 1
+
+      terraform init
+      terraform apply
+    fi
+  done
+}
+
+run_test() {
+  log INF 'Running unit tests...'
+  go test healthchecksio/**
+}
+
+run_test_integration() {
+  [ "${HEALTHCHECKSIO_API_KEY:?'Environment variable "HEALTHCHECKSIO_API_KEY" is required'}" ]
+
+  log INF "Running integration tests ($(terraform version | head -n 1))..."
+
+  for d in ${test_dir:?}/**; do
+    if [[ -d "${d}" ]]; then
+      log INF "Test: $(basename "${d:?}") (${d:?})"
+
+      rm -rf "${d:?}/terraform.tfstate" || true
+      rm -rf "${d:?}/terraform.tfstate.backup" || true
+      install_plugin "${d:?}"
+      cd "${d:?}" || exit 1
+
+      terraform init
+      terraform apply -auto-approve
+      terraform destroy -auto-approve
+    fi
+  done
+}
+
+run_test_docker() {
+  run_build
+
+  local -a versions=('0.11.14' '0.12.2')
+
+  for v in "${versions[@]}"; do
+    if ! docker image ls | grep hashicorp/terraform | grep -q "${v:?}-test"; then
+      log INF "Building test image for terraform v${v:?}"
+      docker build -t "hashicorp/terraform:${v:?}-test" --build-arg "VERSION=${v:?}" -f "${PWD:?}/test/Dockerfile.test" .
+    fi
+
+    docker run --rm -it -e HEALTHCHECKSIO_API_KEY -v "${PWD:?}:/work/" "hashicorp/terraform:${v:?}-test" -c "./run test-integration"
+
+    if [[ "$?" != "0" && ${DEBUG} == true ]]; then
+      docker run --rm -it -e HEALTHCHECKSIO_API_KEY -v "${PWD:?}:/work/" "hashicorp/terraform:${v:?}-test"
+    fi
+  done
+}
+
+main() {
+  local command="${1:-}"
+  shift || true
+
+  case "${command}" in
+    build) run_build "$@" ;;
+    examples) run_examples "$@" ;;
+    test) run_test "$@" ;;
+    test-docker) run_test_docker "$@" ;;
+    test-integration) run_test_integration "$@" ;;
+    release) run_release "$@" ;;
+    *) run_help ;;
+  esac
+}
+
+main "$@"
