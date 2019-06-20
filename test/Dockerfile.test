@@ -1,6 +1,14 @@
-ARG VERSION
-FROM hashicorp/terraform:$VERSION
+FROM golang:1.12.6-stretch
+ARG TERRAFORM_VERSION
 LABEL maintainer="Dotnet Mentor <info@dotnetmentor.se>"
-RUN apk add --update git bash openssh
+RUN apt-get update && apt-get install -y git bash openssl curl unzip
+RUN curl -L https://github.com/goreleaser/goreleaser/releases/download/v0.85.1/goreleaser_Linux_arm64.tar.gz > goreleaser_Linux_arm64.tar.gz
+RUN tar -xzf goreleaser_Linux_arm64.tar.gz && mv goreleaser /bin/goreleaser && chmod +x /bin/goreleaser && rm goreleaser_Linux_arm64.tar.gz
+RUN curl -L https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip > terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+RUN unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip && mv terraform /bin/terraform && chmod +x /bin/terraform && rm terraform_${TERRAFORM_VERSION}_linux_amd64.zip && terraform --version
 WORKDIR /work/
+ENV GO111MODULE=on
+COPY go.mod .
+COPY go.sum .
+RUN go mod download
 ENTRYPOINT ["/bin/bash"]

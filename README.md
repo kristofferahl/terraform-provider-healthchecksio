@@ -61,50 +61,62 @@ $ terraform import healthchecksio_check.my_first_check 760ca858-576a-432b-8b1f-3
 - [Go](https://golang.org/) 1.12 or later
 - [Terraform](https://www.terraform.io/) v0.12 or later
 - [Healthchecks.io](https://healthchecks.io/) account and an API key
-- [goreleaser](https://goreleaser.com/) 0.85.1 or later
+- [goreleaser](https://goreleaser.com/) 0.85.1
+
 
 ### Help
 
 ```bash
-./run --help
+./run help
+```
+
+### Running commands - local
+
+```bash
+./run <command> [<arg1> <arg2> ...]
+```
+
+### Running commands - in docker
+
+Most commands can also be executed using docker. Simply run the commands like below.
+
+```bash
+./run docker <command> [<arg1> <arg2> ...]
 ```
 
 ### Running unit tests
 
 ```bash
 ./run test
+./run docker test
 ```
 
 ### Running integration tests
 
 ```bash
 ./run test-integration
-```
-
-### Running integration tests in docker
-
-This command runs the integration tests against multiple versions of Terraform defined in the `run` script.
-
-```bash
-./run test-docker
+./run docker test-integration
 ```
 
 ### Building the provider
 
 ```bash
 ./run build
+./run docker build
 ```
 
 ### Running examples
 
 ```bash
 ./run examples [<example>]
+./run docker examples [<example>]
 ```
 
 ### Releasing a new version
 
 ```bash
 ./run release
+./run docker release
 ```
 
 ## Contributors
