@@ -61,7 +61,7 @@ $ terraform import healthchecksio_check.my_first_check 760ca858-576a-432b-8b1f-3
 - [Go](https://golang.org/) 1.12 or later
 - [Terraform](https://www.terraform.io/) v0.12 or later
 - [Healthchecks.io](https://healthchecks.io/) account and an API key
-- [goreleaser](https://goreleaser.com/) 0.85.1
+- [goreleaser](https://goreleaser.com/) 0.110.0
 
 
 ### Help
