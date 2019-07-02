@@ -1,0 +1,10 @@
+version: 2
+jobs:
+  build:
+    machine:
+      docker_layer_caching: true
+    steps:
+      - checkout
+      - run: ./run docker test
+      - run: ./run docker build
+      - run: ./run docker test-integration
