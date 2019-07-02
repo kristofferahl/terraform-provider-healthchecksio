@@ -212,5 +212,5 @@ func toSliceOfString(a []interface{}) []string {
 func hasChange(d *schema.ResourceData) bool {
 	return d.HasChange("tags") || d.HasChange("timeout") ||
 		d.HasChange("grace") || d.HasChange("schedule") ||
-		d.HasChange("timezone") || d.HasChange("channels")
+		d.HasChange("timezone") || d.HasChange("channels") || d.HasChange("name")
 }
