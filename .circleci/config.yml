@@ -5,6 +5,48 @@ jobs:
       docker_layer_caching: true
     steps:
       - checkout
-      - run: ./run docker test
       - run: ./run docker build
+  test:
+    machine:
+      docker_layer_caching: true
+    steps:
+      - checkout
+      - run: ./run docker test
+  integration-test:
+    machine:
+      docker_layer_caching: true
+    steps:
+      - checkout
       - run: ./run docker test-integration
+  release:
+    machine:
+      docker_layer_caching: true
+    steps:
+      - checkout
+      - run: echo "Releaseing..."
+
+workflows:
+  version: 2
+  build-test-release:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+      - integration-test:
+          requires:
+            - build
+      - approve-release:
+          type: approval
+          requires:
+            - test
+            - integration-test
+          filters:
+            branches:
+              only: master
+      - release:
+          requires:
+            - approve-release
+          filters:
+            branches:
+              only: master
