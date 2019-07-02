@@ -6,6 +6,10 @@ jobs:
     steps:
       - checkout
       - run: ./run docker build
+      - persist_to_workspace:
+          root: .
+          paths:
+            - dist
   test:
     machine:
       docker_layer_caching: true
@@ -17,6 +21,8 @@ jobs:
       docker_layer_caching: true
     steps:
       - checkout
+      - attach_workspace:
+          at: ./
       - run: ./run docker test-integration
   release:
     machine:
@@ -41,12 +47,6 @@ workflows:
           requires:
             - test
             - integration-test
-          filters:
-            branches:
-              only: master
       - release:
           requires:
             - approve-release
-          filters:
-            branches:
-              only: master
