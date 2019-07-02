@@ -29,7 +29,7 @@ jobs:
       docker_layer_caching: true
     steps:
       - checkout
-      - run: echo "Releaseing..."
+      - run: ./run docker release
 
 workflows:
   version: 2
@@ -47,6 +47,12 @@ workflows:
           requires:
             - test
             - integration-test
+          filters:
+            branches:
+              only: master
       - release:
           requires:
             - approve-release
+          filters:
+            branches:
+              only: master
