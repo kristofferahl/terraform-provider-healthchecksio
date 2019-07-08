@@ -1,5 +1,7 @@
 # Terraform Provider for healthchecks.io
 
+[![CircleCI](https://circleci.com/gh/kristofferahl/terraform-provider-healthchecksio/tree/master.svg?style=svg)](https://circleci.com/gh/kristofferahl/terraform-provider-healthchecksio/tree/master)
+
 ## Usage
 
 ### Provider configuration

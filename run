@@ -53,10 +53,6 @@ run_build() {
 }
 
 run_release() {
-  run_build
-  run_test
-  run_test_integration
-
   log INF 'Creating a release using goreleaser...'
   goreleaser --rm-dist
 }
