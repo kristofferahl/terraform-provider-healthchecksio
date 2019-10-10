@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     machine:
-      docker_layer_caching: true
+      docker_layer_caching: false
     steps:
       - checkout
       - run: ./run docker build
@@ -12,13 +12,13 @@ jobs:
             - dist
   test:
     machine:
-      docker_layer_caching: true
+      docker_layer_caching: false
     steps:
       - checkout
       - run: ./run docker test
   integration-test:
     machine:
-      docker_layer_caching: true
+      docker_layer_caching: false
     steps:
       - checkout
       - attach_workspace:
@@ -26,7 +26,7 @@ jobs:
       - run: ./run docker test-integration
   release:
     machine:
-      docker_layer_caching: true
+      docker_layer_caching: false
     steps:
       - checkout
       - run: ./run docker release
