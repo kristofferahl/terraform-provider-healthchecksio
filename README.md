@@ -13,7 +13,7 @@
 
 ### Example
 
-```
+```terraform
 provider "healthchecksio" {
   api_key = var.healthchecks_io_api_key
   version = "~> 1.3"
