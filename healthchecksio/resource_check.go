@@ -60,6 +60,16 @@ func resourceHealthcheck() *schema.Resource {
 				Description: "Channels integrated with the healthcheck",
 				Optional:    true,
 			},
+			"ping_url": &schema.Schema{
+				Type:        schema.TypeString,
+				Description: "Ping URL associated with this healthcheck",
+				Computed:    true,
+			},
+			"pause_url": &schema.Schema{
+				Type:        schema.TypeString,
+				Description: "Pause URL associated with this healthcheck",
+				Computed:    true,
+			},
 		},
 	}
 }
@@ -122,6 +132,8 @@ func resourceHealthcheckRead(d *schema.ResourceData, m interface{}) error {
 	d.Set("schedule", healthcheck.Schedule)
 	d.Set("timezone", healthcheck.Timezone)
 	d.Set("channels", healthcheck.Channels)
+	d.Set("ping_url", healthcheck.PingURL)
+	d.Set("pause_url", healthcheck.PauseURL)
 
 	return nil
 }
