@@ -45,6 +45,10 @@ resource "healthchecksio_check" "test" {
 data "healthchecksio_channel" "pagerduty" {
   kind = "pd"
 }
+
+output "ping_url" {
+  value = healthchecksio_check.test.ping_url
+}
 ```
 
 More examples can be found in the [examples directory](./examples).
@@ -125,3 +129,5 @@ Most commands can also be executed using docker. Simply run the commands like be
 - [masutaka](https://github.com/masutaka)
 - [kristofferahl](https://github.com/kristofferahl)
 - [rossmckelvie](https://github.com/rossmckelvie)
+- [matejvelikonja](https://github.com/matejvelikonja)
+- [grenzr](https://github.com/grenzr)
