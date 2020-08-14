@@ -3,7 +3,7 @@ package healthchecksio
 import (
 	"log"
 
-	"github.com/kristofferahl/go-healthchecksio"
+	"github.com/icaho/go-healthchecksio"
 )
 
 const (

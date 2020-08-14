@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/kristofferahl/go-healthchecksio"
+	"github.com/icaho/go-healthchecksio"
 )
 
 func resourceHealthcheck() *schema.Resource {
@@ -69,6 +69,11 @@ func resourceHealthcheck() *schema.Resource {
 				Type:        schema.TypeString,
 				Description: "Pause URL associated with this healthcheck",
 				Computed:    true,
+			},
+			"desc": &schema.Schema{
+				Type: 		 schema.TypeString,
+				Description: "Description of the healthcheck",
+				Optional:    true,
 			},
 		},
 	}
@@ -134,6 +139,7 @@ func resourceHealthcheckRead(d *schema.ResourceData, m interface{}) error {
 	d.Set("channels", healthcheck.Channels)
 	d.Set("ping_url", healthcheck.PingURL)
 	d.Set("pause_url", healthcheck.PauseURL)
+	d.Set("desc", healthcheck.Description)
 
 	return nil
 }
@@ -207,6 +213,10 @@ func createHealthcheckFromResourceData(d *schema.ResourceData) (*healthchecksio.
 		healthcheck.Channels = strings.Join(channels, ",")
 	}
 
+	if attr, ok := d.GetOk("desc"); ok {
+		healthcheck.Description = attr.(string)
+	}
+
 	return &healthcheck, nil
 }
 
@@ -222,7 +232,7 @@ func toSliceOfString(a []interface{}) []string {
 }
 
 func hasChange(d *schema.ResourceData) bool {
-	return d.HasChange("tags") || d.HasChange("timeout") ||
+	return d.HasChange("desc") || d.HasChange("tags") || d.HasChange("timeout") ||
 		d.HasChange("grace") || d.HasChange("schedule") ||
 		d.HasChange("timezone") || d.HasChange("channels") || d.HasChange("name")
 }
