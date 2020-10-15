@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+if go version &>/dev/null; then
+  go mod tidy
+
+  if git diff --exit-code &>/dev/null; then
+    echo '[pre-commit hook] Running "go mod tidy" generated no changes to the code.'
+  else
+    echo '[pre-commit hook] Running "go mod tidy" generated changes to the code.'
+    echo '[pre-commit hook] Please stage the changes before committing again.'
+    exit 1
+  fi
+fi
