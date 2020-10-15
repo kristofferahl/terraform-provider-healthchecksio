@@ -127,8 +127,9 @@ Most commands can also be executed using docker. Simply run the commands like be
 ```
 
 ## Contributors
-- [masutaka](https://github.com/masutaka)
 - [kristofferahl](https://github.com/kristofferahl)
+- [masutaka](https://github.com/masutaka)
 - [rossmckelvie](https://github.com/rossmckelvie)
 - [matejvelikonja](https://github.com/matejvelikonja)
 - [grenzr](https://github.com/grenzr)
+- [icaho](https://github.com/icaho)
