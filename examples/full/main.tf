@@ -1,9 +1,10 @@
 provider "healthchecksio" {
-  version = "~> 1.3"
+  version = "~> 1.5.0"
 }
 
 resource "healthchecksio_check" "test" {
   name = "test-check"
+  desc = "A test check"
 
   tags = [
     "go",
