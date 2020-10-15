@@ -121,6 +121,8 @@ main() {
   local command="${1:-}"
   shift || true
 
+  git config core.hooksPath .githooks
+
   case "${command}" in
     build) run_build "$@" ;;
     docker) run_docker "${TERRAFORM_VERSION:?}" "$@" ;;
