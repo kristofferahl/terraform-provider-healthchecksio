@@ -16,7 +16,7 @@
 ```terraform
 provider "healthchecksio" {
   api_key = var.healthchecks_io_api_key
-  version = "~> 1.5.0"
+  version = "~> 1.6.0"
 }
 
 variable "healthchecks_io_api_key" {
