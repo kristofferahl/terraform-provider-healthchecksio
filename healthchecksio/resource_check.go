@@ -71,7 +71,7 @@ func resourceHealthcheck() *schema.Resource {
 				Computed:    true,
 			},
 			"desc": &schema.Schema{
-				Type: 		 schema.TypeString,
+				Type:        schema.TypeString,
 				Description: "Description of the healthcheck",
 				Optional:    true,
 			},

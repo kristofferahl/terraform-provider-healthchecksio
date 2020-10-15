@@ -1,5 +1,5 @@
 provider "healthchecksio" {
-  version = "~> 1.3"
+  version = "~> 1.5.0"
 }
 
 resource "healthchecksio_check" "bare_minimum" {
