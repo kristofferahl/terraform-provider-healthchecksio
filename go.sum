@@ -111,6 +111,8 @@ github.com/hashicorp/yamux v0.0.0-20180604194846-3520598351bb/go.mod h1:+NfK9FKe
 github.com/hashicorp/yamux v0.0.0-20181012175058-2f1d1f20f75d h1:kJCB4vdITiW1eC1vq2e6IsrXKrZit1bv/TDYFGMp4BQ=
 github.com/hashicorp/yamux v0.0.0-20181012175058-2f1d1f20f75d/go.mod h1:+NfK9FKeTrX5uv1uIXGdwYDTeHna2qgaIlx54MXqjAM=
 github.com/hpcloud/tail v1.0.0/go.mod h1:ab1qPbhIpdTxEkNHXyeSf5vhxWSCs/tWer42PpOxQnU=
+github.com/icaho/go-healthchecksio v1.0.0 h1:xa61eBogLGCaJLK8xteOrIVK/Gs1HCBBmVLYUld8LpY=
+github.com/icaho/go-healthchecksio v1.0.0/go.mod h1:cfshcEKCX/jDmoIYSOwZnfyCyaIEmaeiRJC1beJDv1k=
 github.com/jessevdk/go-flags v1.4.0/go.mod h1:4FA24M0QyGHXBuZZK/XkWh8h0e1EYbRYJSGM75WSRxI=
 github.com/jmespath/go-jmespath v0.0.0-20160202185014-0b12d6b521d8/go.mod h1:Nht3zPeWKUH0NzdCt2Blrr5ys8VGpn0CEB0cQHVjt7k=
 github.com/jmespath/go-jmespath v0.0.0-20180206201540-c2b33e8439af h1:pmfjZENx5imkbgOkpRUYLnmbU7UEFbjtDA2hxJ1ichM=
@@ -124,6 +126,8 @@ github.com/kr/text v0.1.0 h1:45sCR5RtlFHMR4UwH9sdQ5TC8v0qDQCHnXt+kaKSTVE=
 github.com/kr/text v0.1.0/go.mod h1:4Jbv+DJW3UT/LiOwJeYQe1efqtUx/iVham/4vfdArNI=
 github.com/kristofferahl/go-healthchecksio v1.0.0 h1:OSrjUFjXLp1vR1MrFKufmO3A5NjD/CMYSwIqABmqWkE=
 github.com/kristofferahl/go-healthchecksio v1.0.0/go.mod h1:kM2vqIphKHp+Rp3DjFN9ogxOtiZmmWAWf7NK1YYrHYo=
+github.com/kristofferahl/go-healthchecksio v1.1.0 h1:attem/nlXO5/ekdPBd+x2qSjG4e8LqGmgw+zqx9QD40=
+github.com/kristofferahl/go-healthchecksio v1.1.0/go.mod h1:Y6ptmTrDSCGukP22zlbddM4KGwnOqMjT4itv++OIX6M=
 github.com/kylelemons/godebug v0.0.0-20170820004349-d65d576e9348 h1:MtvEpTB6LX3vkb4ax0b5D2DHbNAUsen0Gx5wZoq3lV4=
 github.com/kylelemons/godebug v0.0.0-20170820004349-d65d576e9348/go.mod h1:B69LEHPfb2qLo0BaaOLcbitczOKLWTsrBG9LczfCD4k=
 github.com/kylelemons/godebug v1.1.0 h1:RPNrshWIDI6G2gRW9EHilWtl7Z6Sb1BR0xunSBf0SNc=
