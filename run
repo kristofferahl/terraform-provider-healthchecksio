@@ -46,13 +46,32 @@ commands:
   release             Create a new release of the provider"
 }
 
+export GPG_FINGERPRINT="${GPG_FINGERPRINT:-}"
+
+ensure_gpg_fingerprint() {
+  if [[ "${GPG_FINGERPRINT}" == '' && ${CI:-false} == false ]]; then
+    log INF 'GPG_FINGERPRINT is not set in your environment. Please provide your gpg email adress to have it set for you!'
+    echo -n ' GPG Email: '
+    read -r GPG_FINGERPRINT
+  fi
+  [[ "${GPG_FINGERPRINT}" == '' ]] && log ERR 'Running this command requires the GPG_FINGERPRINT environment variable to be set. Exiting!' && exit 1
+  return 0
+}
+
 run_build() {
   log INF 'Cross-compiling using goreleaser...'
-  goreleaser --snapshot --skip-publish --skip-validate --rm-dist
+  [[ "${1:-}" == '--sign' ]] && ensure_gpg_fingerprint
+
+  if [[ "${GPG_FINGERPRINT}" == '' ]]; then
+    goreleaser --snapshot --skip-publish --skip-sign --rm-dist
+  else
+    goreleaser --snapshot --skip-publish --skip-validate --rm-dist
+  fi
 }
 
 run_release() {
   log INF 'Creating a release using goreleaser...'
+  ensure_gpg_fingerprint
   goreleaser --rm-dist
 }
 
@@ -114,7 +133,7 @@ run_docker() {
   [[ "${1:-}" == 'docker' ]] && log ERR 'Unable to run docker in docker!' && exit 1
 
   log INF "Running in docker... (terraform v${v:?})"
-  docker run --rm -it -e HEALTHCHECKSIO_API_KEY -e GITHUB_TOKEN -v "${PWD:?}:/work/" "terraform-provider-healthchecksio:${v:?}-test" -c "./run $*"
+  docker run --rm -it -e HEALTHCHECKSIO_API_KEY -e GITHUB_TOKEN -e GPG_FINGERPRINT -v "${PWD:?}:/work/" "terraform-provider-healthchecksio:${v:?}-test" -c "./run $*"
 }
 
 main() {
