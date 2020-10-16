@@ -34,16 +34,12 @@ install_plugin() {
   done
 }
 
-run_help() {
-  echo "usage: ./run <command> [<arg1> <arg2> ...]
+generate_provider_config_file() {
+  [ "${PROVIDER_VERSION:?'Environment variable "PROVIDER_VERSION" is required'}" ]
 
-commands:
-  build               Build the provider
-  docker              Run a command in docker (example: ./run docker test)
-  examples            Run examples
-  test                Run tests
-  test-integration    Run integration tests
-  release             Create a new release of the provider"
+  echo "provider \"healthchecksio\" {
+version = \"~> ${PROVIDER_VERSION:?}\"
+}" >generated.tf
 }
 
 export GPG_FINGERPRINT="${GPG_FINGERPRINT:-}"
@@ -56,6 +52,26 @@ ensure_gpg_fingerprint() {
   fi
   [[ "${GPG_FINGERPRINT}" == '' ]] && log ERR 'Running this command requires the GPG_FINGERPRINT environment variable to be set. Exiting!' && exit 1
   return 0
+}
+
+run_help() {
+  echo "usage: ./run <command> [<arg1> <arg2> ...]
+
+commands:
+  build               Build the provider
+  docker              Run a command in docker (example: ./run docker test)
+  examples            Run examples
+  test                Run tests
+  test-integration    Run integration tests
+  release             Create a new release of the provider"
+}
+
+run_create_provider_version() {
+  local version="${1:?'A version is required'}"
+  local snapshot="${2:-false}"
+  local provider_version="${version:?}"
+  [[ "${snapshot}" == 'true' ]] && provider_version+='-next'
+  echo "${provider_version:?}" >./provider-version
 }
 
 run_build() {
@@ -91,6 +107,8 @@ run_examples() {
       install_plugin "${d:?}"
       cd "${d:?}" || exit 1
 
+      generate_provider_config_file
+
       terraform init
       terraform apply
     fi
@@ -115,6 +133,8 @@ run_test_integration() {
       rm -rf "${d:?}/terraform.tfstate.backup" || true
       install_plugin "${d:?}"
       cd "${d:?}" || exit 1
+
+      generate_provider_config_file
 
       terraform init
       terraform apply -auto-approve
@@ -144,7 +164,11 @@ main() {
 
   git config core.hooksPath .githooks
 
+  export PROVIDER_VERSION
+  [[ -f ./provider-version ]] && PROVIDER_VERSION="$(cat ./provider-version)"
+
   case "${command}" in
+    create-provider-version) run_create_provider_version "$@" ;;
     build) run_build "$@" ;;
     docker) run_docker "${TERRAFORM_VERSION:?}" "$@" ;;
     examples) run_examples "$@" ;;

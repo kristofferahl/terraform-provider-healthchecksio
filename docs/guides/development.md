@@ -31,6 +31,13 @@ Most commands can also be executed using docker. Simply run the commands like be
 ./run docker <command> [<arg1> <arg2> ...]
 ```
 
+## Building the provider
+
+```bash
+./run build
+./run docker build
+```
+
 ## Running unit tests
 
 ```bash
@@ -39,20 +46,15 @@ Most commands can also be executed using docker. Simply run the commands like be
 ```
 
 ## Running integration tests
+**NOTE**: Depends on the output of the build command
 
 ```bash
 ./run test-integration
 ./run docker test-integration
 ```
 
-## Building the provider
-
-```bash
-./run build
-./run docker build
-```
-
 ## Running examples
+**NOTE**: Depends on the output of the build command
 
 ```bash
 ./run examples [<example>]

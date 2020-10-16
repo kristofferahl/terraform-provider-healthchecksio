@@ -1,7 +1,3 @@
-provider "healthchecksio" {
-  version = "~> 1.6.0"
-}
-
 resource "healthchecksio_check" "test" {
   name = "test-check"
   desc = "A test check"

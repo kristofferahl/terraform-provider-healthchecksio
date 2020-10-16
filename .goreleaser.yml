@@ -3,6 +3,7 @@
 before:
   hooks:
     - go mod download
+    - ./run create-provider-version "{{ .Version }}" "{{ .IsSnapshot }}"
 builds:
 - id: dist
   env:
