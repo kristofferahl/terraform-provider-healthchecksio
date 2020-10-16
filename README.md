@@ -2,8 +2,7 @@
 
 A provider used to manage [Healthchecks.io](https://healthchecks.io/) resources.
 
-[![CircleCI](https://circleci.com/gh/kristofferahl/terraform-provider-healthchecksio/tree/master.svg?style=svg)](https://circleci.com/gh/kristofferahl/terraform-provider-healthchecksio/tree/master)
-
+[![Actions Status](https://github.com/kristofferahl/terraform-provider-healthchecksio/workflows/CI/badge.svg)](https://github.com/kristofferahl/terraform-provider-healthchecksio/actions)
 
 ## Documentation, examples and guides
 
