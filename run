@@ -133,7 +133,9 @@ run_docker() {
   [[ "${1:-}" == 'docker' ]] && log ERR 'Unable to run docker in docker!' && exit 1
 
   log INF "Running in docker... (terraform v${v:?})"
-  docker run --rm -it -e HEALTHCHECKSIO_API_KEY -e GITHUB_TOKEN -e GPG_FINGERPRINT -v "${PWD:?}:/work/" "terraform-provider-healthchecksio:${v:?}-test" -c "./run $*"
+  local tty='-it'
+  [[ ${CI:-false} == true ]] && tty=''
+  docker run --rm ${tty:-} -e HEALTHCHECKSIO_API_KEY -e GITHUB_TOKEN -e GPG_FINGERPRINT -v "${PWD:?}:/work/" "terraform-provider-healthchecksio:${v:?}-test" -c "./run $*"
 }
 
 main() {
