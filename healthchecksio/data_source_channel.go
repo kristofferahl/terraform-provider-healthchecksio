@@ -15,17 +15,17 @@ func dataSourceHealthcheckChannel() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"id": &schema.Schema{
 				Type:        schema.TypeString,
-				Description: "ID of the healthcheck channel",
+				Description: "ID of the channel",
 				Computed:    true,
 			},
 			"name": &schema.Schema{
 				Type:        schema.TypeString,
-				Description: "Name of the healthcheck channel",
+				Description: "Name of the channel to search for",
 				Optional:    true,
 			},
 			"kind": &schema.Schema{
 				Type:        schema.TypeString,
-				Description: "Kind of the healthcheck channel",
+				Description: "Kind of channel",
 				Required:    true,
 			},
 		},

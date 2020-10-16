@@ -22,29 +22,29 @@ func resourceHealthcheck() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"name": &schema.Schema{
 				Type:        schema.TypeString,
-				Description: "Name of the healthcheck",
+				Description: "Name of the check",
 				Required:    true,
 			},
 			"tags": &schema.Schema{
 				Type:        schema.TypeList,
-				Description: "Tags associated with the healthcheck",
+				Description: "Tags associated with the check",
 				Optional:    true,
 				Elem:        &schema.Schema{Type: schema.TypeString},
 			},
 			"timeout": &schema.Schema{
 				Type:        schema.TypeInt,
-				Description: "Timeout expected period of the healthcheck",
+				Description: "Timeout period of the check",
 				Optional:    true,
 			},
 			"grace": &schema.Schema{
 				Type:        schema.TypeInt,
-				Description: "Grace period for the healthcheck",
+				Description: "Grace period for the check",
 				Optional:    true,
 				Default:     3600,
 			},
 			"schedule": &schema.Schema{
 				Type:        schema.TypeString,
-				Description: "Schedule defining the healthcheck",
+				Description: "A cron expression defining the check's schedule",
 				Optional:    true,
 			},
 			"timezone": &schema.Schema{
@@ -57,22 +57,22 @@ func resourceHealthcheck() *schema.Resource {
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
 				},
-				Description: "Channels integrated with the healthcheck",
+				Description: "Channels integrated with the check",
 				Optional:    true,
 			},
 			"ping_url": &schema.Schema{
 				Type:        schema.TypeString,
-				Description: "Ping URL associated with this healthcheck",
+				Description: "Ping URL associated with this check",
 				Computed:    true,
 			},
 			"pause_url": &schema.Schema{
 				Type:        schema.TypeString,
-				Description: "Pause URL associated with this healthcheck",
+				Description: "Pause URL associated with this check",
 				Computed:    true,
 			},
 			"desc": &schema.Schema{
 				Type:        schema.TypeString,
-				Description: "Description of the healthcheck",
+				Description: "Description of the check",
 				Optional:    true,
 			},
 		},
