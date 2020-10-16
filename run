@@ -3,6 +3,7 @@
 set -euo pipefail
 
 export TERRAFORM_VERSION='0.12.2'
+export GORELEASER_BIN="${GORELEASER_BIN:-goreleaser}"
 
 declare -r plugins_dir=".terraform/plugins"
 declare -r dist_dir="${PWD:?}/dist"
@@ -79,16 +80,16 @@ run_build() {
   [[ "${1:-}" == '--sign' ]] && ensure_gpg_fingerprint
 
   if [[ "${GPG_FINGERPRINT}" == '' ]]; then
-    goreleaser --snapshot --skip-publish --skip-sign --rm-dist
+    ${GORELEASER_BIN:?} --snapshot --skip-publish --skip-sign --rm-dist
   else
-    goreleaser --snapshot --skip-publish --skip-validate --rm-dist
+    ${GORELEASER_BIN:?} --snapshot --skip-publish --skip-validate --rm-dist
   fi
 }
 
 run_release() {
   log INF 'Creating a release using goreleaser...'
   ensure_gpg_fingerprint
-  goreleaser --rm-dist
+  ${GORELEASER_BIN:?} --rm-dist
 }
 
 run_examples() {

@@ -5,3 +5,4 @@ crash.log
 dist/
 provider-version
 generated.tf
+bin/

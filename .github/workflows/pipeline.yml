@@ -13,7 +13,7 @@ name: CI
 on: [push, pull_request]
 
 jobs:
-  build-and-test:
+  build-test-release:
     runs-on: ubuntu-latest
     steps:
       -
@@ -21,6 +21,19 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+      -
+        name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.15
+      -
+        name: Set up Goreleaser
+        run: |
+          mkdir -p "${TMPDIR:?}"
+          curl -sL https://git.io/goreleaser | bash -s -- --version
+        env:
+          TMPDIR: ${{ github.workspace }}/bin
+          VERSION: v0.145.0
       -
         name: Import GPG key
         id: import_gpg
@@ -30,15 +43,24 @@ jobs:
           PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
       -
         name: Build
-        run: ./run docker build --sign
+        run: ./run build --sign
         env:
-          GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GORELEASER_BIN: ${{ github.workspace }}/bin/goreleaser
+          GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
       -
         name: Test
-        run: ./run docker test
+        run: ./run test
       -
         name: Intergration Test
         run: ./run docker test-integration
         env:
           HEALTHCHECKSIO_API_KEY: ${{ secrets.HEALTHCHECKSIO_API_KEY }}
+      -
+        name: Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: ./run release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GORELEASER_BIN: ${{ github.workspace }}/bin/goreleaser
+          GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
