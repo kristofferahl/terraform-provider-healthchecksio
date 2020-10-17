@@ -57,7 +57,7 @@ jobs:
         env:
           HEALTHCHECKSIO_API_KEY: ${{ secrets.HEALTHCHECKSIO_API_KEY }}
       -
-        name: Release
+        name: Release on valid tag
         if: startsWith(github.ref, 'refs/tags/v')
         run: ./run release
         env:
