@@ -64,6 +64,7 @@ commands:
   examples            Run examples
   test                Run tests
   test-integration    Run integration tests
+  prepare-release     Prepare for a new release (local only)
   release             Create a new release of the provider"
 }
 
@@ -84,6 +85,27 @@ run_build() {
   else
     ${GORELEASER_BIN:?} --snapshot --skip-publish --skip-validate --rm-dist
   fi
+}
+
+run_prepare_release() {
+  log INF 'Listing remote tags'
+  git ls-remote --tags --sort=version:refname origin 'v*'
+
+  declare next_version
+  echo -n 'Bump version to (semver prefixed with v): '
+  read -r next_version
+
+  if [[ "${next_version}" != '' ]]; then
+    if [[ "${next_version:?}" == v* ]]; then
+      log INF "Creating tag ${next_version:?}"
+      git tag "${next_version:?}" -a -s -m "Release ${next_version:?}"
+    else
+      log ERR 'Invalid version (must be prefixed with v)'
+    fi
+  else
+    log ERR 'No version provided (skipping)'
+  fi
+  git tag --list 'v*' -n --sort=version:refname | cat
 }
 
 run_release() {
@@ -175,6 +197,7 @@ main() {
     examples) run_examples "$@" ;;
     test) run_test "$@" ;;
     test-integration) run_test_integration "$@" ;;
+    prepare-release) run_prepare_release "$@" ;;
     release) run_release "$@" ;;
     help) run_help ;;
     *) run_help ;;
