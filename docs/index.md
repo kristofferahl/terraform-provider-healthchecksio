@@ -10,7 +10,7 @@ A provider used to manage [Healthchecks.io](https://healthchecks.io/) resources.
 
 ```hcl
 provider "healthchecksio" {
-  api_key = var.healthchecks_io_api_key
+  api_key = var.healthchecksio_api_key
   version = "~> 1.6.0"
 }
 

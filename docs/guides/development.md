@@ -61,7 +61,24 @@ Most commands can also be executed using docker. Simply run the commands like be
 ./run docker examples [<example>]
 ```
 
-## Releasing a new version
+## Preparing a release
+
+```bash
+./run prepare-release
+```
+
+This will prompt you for the next version. Make sure the version you choose follows Semantic Versioning and is prefixed with `v` (example version: `v1.0.0`).
+
+## Automatic release pipeline
+
+When pushing a tag that match the terraform provider tag conventions, the automatic release pipeline will be triggered.
+See [Publishing Providers](https://www.terraform.io/docs/registry/providers/publishing.html) for more information.
+
+## Releasing a new version manually
+
+**NOTE** In general, manually releases should be avoided in favour of using the automatic release pipeline.
+
+**NOTE** Only tags that follow semantic versioning should be released to the public.
 
 ```bash
 ./run release

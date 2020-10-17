@@ -39,7 +39,7 @@ generate_provider_config_file() {
   [ "${PROVIDER_VERSION:?'Environment variable "PROVIDER_VERSION" is required'}" ]
 
   echo "provider \"healthchecksio\" {
-version = \"~> ${PROVIDER_VERSION:?}\"
+  version = \"~> ${PROVIDER_VERSION:?}\"
 }" >generated.tf
 }
 
@@ -106,6 +106,9 @@ run_prepare_release() {
     log ERR 'No version provided (skipping)'
   fi
   git tag --list 'v*' -n --sort=version:refname | cat
+
+  log INF "When you're ready to release, simply use the following commands:"
+  log INF "git push --follow-tags"
 }
 
 run_release() {
