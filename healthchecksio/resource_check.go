@@ -75,6 +75,11 @@ func resourceHealthcheck() *schema.Resource {
 				Description: "Description of the check",
 				Optional:    true,
 			},
+			"methods": &schema.Schema{
+				Type:        schema.TypeString,
+				Description: "Allowed HTTP methods for making ping requests",
+				Optional:    true,
+			},
 		},
 	}
 }
@@ -140,6 +145,7 @@ func resourceHealthcheckRead(d *schema.ResourceData, m interface{}) error {
 	d.Set("ping_url", healthcheck.PingURL)
 	d.Set("pause_url", healthcheck.PauseURL)
 	d.Set("desc", healthcheck.Description)
+	d.Set("methods", healthcheck.Methods)
 
 	return nil
 }
@@ -217,6 +223,10 @@ func createHealthcheckFromResourceData(d *schema.ResourceData) (*healthchecksio.
 		healthcheck.Description = attr.(string)
 	}
 
+	if attr, ok := d.GetOk("methods"); ok {
+		healthcheck.Methods = attr.(string)
+	}
+
 	return &healthcheck, nil
 }
 
@@ -233,6 +243,6 @@ func toSliceOfString(a []interface{}) []string {
 
 func hasChange(d *schema.ResourceData) bool {
 	return d.HasChange("desc") || d.HasChange("tags") || d.HasChange("timeout") ||
-		d.HasChange("grace") || d.HasChange("schedule") ||
+		d.HasChange("grace") || d.HasChange("schedule") || d.HasChange("methods") ||
 		d.HasChange("timezone") || d.HasChange("channels") || d.HasChange("name")
 }
