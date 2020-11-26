@@ -38,27 +38,37 @@ jobs:
         name: Import GPG key
         id: import_gpg
         uses: paultyng/ghaction-import-gpg@v2.1.0
+        if: env.GPG_PRIVATE_KEY != '' && env.PASSPHRASE != ''
         env:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
           PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
       -
-        name: Build
+        name: Build and sign
         run: ./run build --sign
+        if: steps.import_gpg.outputs.fingerprint != ''
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GORELEASER_BIN: ${{ github.workspace }}/bin/goreleaser
           GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
+      -
+        name: Build
+        run: ./run build
+        if: steps.import_gpg.outputs.fingerprint == ''
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GORELEASER_BIN: ${{ github.workspace }}/bin/goreleaser
       -
         name: Test
         run: ./run test
       -
         name: Intergration Test
         run: ./run docker test-integration
+        if: env.HEALTHCHECKSIO_API_KEY != ''
         env:
           HEALTHCHECKSIO_API_KEY: ${{ secrets.HEALTHCHECKSIO_API_KEY }}
       -
         name: Release on valid tag
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: github.repository == 'kristofferahl/terraform-provider-healtchecksio' && startsWith(github.ref, 'refs/tags/v')
         run: ./run release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
