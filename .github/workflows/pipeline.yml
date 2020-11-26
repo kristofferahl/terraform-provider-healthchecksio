@@ -68,7 +68,7 @@ jobs:
           HEALTHCHECKSIO_API_KEY: ${{ secrets.HEALTHCHECKSIO_API_KEY }}
       -
         name: Release on valid tag
-        if: github.repository == 'kristofferahl/terraform-provider-healtchecksio' && startsWith(github.ref, 'refs/tags/v')
+        if: github.repository == 'kristofferahl/terraform-provider-healthchecksio' && startsWith(github.ref, 'refs/tags/v')
         run: ./run release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
