@@ -76,7 +76,7 @@ See [Publishing Providers](https://www.terraform.io/docs/registry/providers/publ
 
 ## Releasing a new version manually
 
-**NOTE** In general, manually releases should be avoided in favour of using the automatic release pipeline.
+**NOTE** In general, manual releases should be avoided in favour of using the automatic release pipeline.
 
 **NOTE** Only tags that follow semantic versioning should be released to the public.
 

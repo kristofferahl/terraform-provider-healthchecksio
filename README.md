@@ -18,6 +18,7 @@ A provider used to manage [Healthchecks.io](https://healthchecks.io/) resources.
 - [matejvelikonja](https://github.com/matejvelikonja)
 - [grenzr](https://github.com/grenzr)
 - [icaho](https://github.com/icaho)
+- [lblakey](https://github.com/lblakey)
 
 **Contributions appreciated!**
 Open an issue to let us know if you're able to help out. All contributions are welcome!
