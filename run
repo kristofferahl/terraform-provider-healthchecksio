@@ -174,7 +174,7 @@ run_test_integration() {
 
       terraform init
       terraform apply -auto-approve
-      if [[ "${CI:-false}" != "true" ]]; then
+      if [[ ${CI:-false} != true ]]; then
         echo "PRESS ENTER TO CONTINUE..."
         read -r
       fi
