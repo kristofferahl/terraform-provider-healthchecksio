@@ -31,6 +31,7 @@ resource "healthchecksio_check" "test" {
 * `timezone` - (Optional) Timezone used for the schedule
 * `channels` - (Optional) Channels integrated with the check
 * `desc` - (Optional) Description of the check
+* `methods` - (Optional) Allowed HTTP methods for making ping requests
 
 ## Attribute Reference
 
