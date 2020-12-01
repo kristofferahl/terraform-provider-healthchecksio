@@ -195,7 +195,7 @@ run_docker() {
   log INF "Running in docker... (terraform v${v:?})"
   local tty='-it'
   [[ ${CI:-false} == true ]] && tty=''
-  docker run --rm ${tty:-} -e HEALTHCHECKSIO_API_KEY -e GITHUB_TOKEN -e GPG_FINGERPRINT -v "${PWD:?}:/work/" "terraform-provider-healthchecksio:${v:?}-test" -c "./run $*"
+  docker run --rm ${tty:-} -e CI -e HEALTHCHECKSIO_API_KEY -e GITHUB_TOKEN -e GPG_FINGERPRINT -v "${PWD:?}:/work/" "terraform-provider-healthchecksio:${v:?}-test" -c "./run $*"
 }
 
 main() {
