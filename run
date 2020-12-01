@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-export TERRAFORM_VERSION='0.12.2'
+export TERRAFORM_VERSION='0.13.5'
 export GORELEASER_BIN="${GORELEASER_BIN:-goreleaser}"
 
 declare -r plugins_dir=".terraform/plugins"
@@ -20,26 +20,36 @@ function log() {
 
 install_plugin() {
   local destination_dir="${1:?'A destination directory is required'}"
+  local full_plugin_dir="${destination_dir:?}/${plugins_dir:?}/registry.terraform.io/kristofferahl/healthchecksio/${PROVIDER_VERSION:?}"
   log DEB "Installing plugin (src=${dist_dir:?} dest=${destination_dir:?})"
   [[ ! -d "${dist_dir:?}" ]] && log ERR "Source directory not found (${dist_dir:?})! Please run build and try again..." && exit 1
   rm -rf "${destination_dir:?}/${plugins_dir:?}" &>/dev/null || true
-  mkdir -p "${destination_dir:?}/${plugins_dir:?}" &>/dev/null || true
-  cp -R "${dist_dir:?}/." "${destination_dir:?}/${plugins_dir:?}"
+  mkdir -p "${full_plugin_dir:?}" &>/dev/null || true
+  cp -R "${dist_dir:?}/." "${full_plugin_dir:?}"
 
   # Temporary fix. Issue: https://github.com/goreleaser/goreleaser/issues/1059
   local dir_name
-  for dir in ${destination_dir:?}/${plugins_dir:?}/*/; do
+  for dir in ${full_plugin_dir:?}/*/; do
     dir_name="$(basename "${dir:?}")"
     dir_name="${dir_name/dist_/}"
-    mv "${dir}" "${destination_dir:?}/${plugins_dir:?}/${dir_name:?}"
+    mv "${dir}" "${full_plugin_dir:?}/${dir_name:?}"
   done
 }
 
 generate_provider_config_file() {
   [ "${PROVIDER_VERSION:?'Environment variable "PROVIDER_VERSION" is required'}" ]
 
-  echo "provider \"healthchecksio\" {
-  version = \"~> ${PROVIDER_VERSION:?}\"
+  echo "terraform {
+  required_providers {
+    healthchecksio = {
+      source = \"kristofferahl/healthchecksio\"
+      version = \"${PROVIDER_VERSION:?}\"
+    }
+  }
+}
+
+provider \"healthchecksio\" {
+  # Configuration options
 }" >generated.tf
 }
 
@@ -164,6 +174,10 @@ run_test_integration() {
 
       terraform init
       terraform apply -auto-approve
+      if [[ "${CI:-false}" != "true" ]]; then
+        echo "PRESS ENTER TO CONTINUE..."
+        read -r
+      fi
       terraform destroy -auto-approve
     fi
   done
