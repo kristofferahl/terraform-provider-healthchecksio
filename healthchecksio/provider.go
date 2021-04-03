@@ -11,8 +11,14 @@ func Provider() *schema.Provider {
 			"api_key": &schema.Schema{
 				Type:        schema.TypeString,
 				Required:    true,
-				DefaultFunc: schema.EnvDefaultFunc(EnvironmentKey, nil),
+				DefaultFunc: schema.EnvDefaultFunc(APIKeyEnvName, nil),
 				Description: "A healthchecks.io api key.",
+			},
+			"api_url": &schema.Schema{
+				Type:        schema.TypeString,
+				Optional:    true,
+				DefaultFunc: schema.EnvDefaultFunc(APIURLEnvName, ""),
+				Description: "A healthchecks.io api base URL.",
 			},
 		},
 
@@ -30,7 +36,8 @@ func Provider() *schema.Provider {
 
 func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 	config := Config{
-		APIKey: d.Get("api_key").(string),
+		APIKey:  d.Get("api_key").(string),
+		BaseURL: d.Get("api_url").(string),
 	}
 	return config.Client()
 }
