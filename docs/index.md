@@ -44,6 +44,7 @@ output "ping_url" {
 | Property | Description                 | Environment variable   | Type   | Required |
 |----------|-----------------------------|------------------------|--------|----------|
 | api_key  | The healthchecks.io API Key | HEALTHCHECKSIO_API_KEY | string | true     |
+| api_url  | The healthchecks.io API URL | HEALTHCHECKSIO_API_URL | string | false    |
 
 ## Authentication
 
