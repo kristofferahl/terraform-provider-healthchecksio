@@ -20,6 +20,7 @@ A provider used to manage [Healthchecks.io](https://healthchecks.io/) resources.
 - [icaho](https://github.com/icaho)
 - [lblakey](https://github.com/lblakey)
 - [yteraoka](https://github.com/yteraoka)
+- [acraftydev](https://github.com/acraftydev)
 
 **Contributions appreciated!**
 Open an issue to let us know if you're able to help out. All contributions are welcome!
