@@ -2,12 +2,28 @@
 
 The check resource allows a check to be created in [Healthchecks.io](https://healthchecks.io).
 
-## Example Usage
+## Example Usages
 
 ```hcl
-resource "healthchecksio_check" "test" {
-  name = "test-check"
-  desc = "A test check"
+resource "healthchecksio_check" "test_simple" {
+  name = "test-check-simple"
+  desc = "A test check using simple config"
+
+  tags = [
+    "go",
+    "gophers",
+    "unite",
+  ]
+
+  timeout = 24 * 3600 # seconds
+  grace   = 30 * 60   # seconds
+}
+```
+
+```hcl
+resource "healthchecksio_check" "test_cron" {
+  name = "test-check-cron"
+  desc = "A test check using cron syntax"
 
   tags = [
     "go",
