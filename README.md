@@ -21,6 +21,7 @@ A provider used to manage [Healthchecks.io](https://healthchecks.io/) resources.
 - [lblakey](https://github.com/lblakey)
 - [yteraoka](https://github.com/yteraoka)
 - [acraftydev](https://github.com/acraftydev)
+- [pallxk](https://github.com/pallxk)
 
 **Contributions appreciated!**
 Open an issue to let us know if you're able to help out. All contributions are welcome!
