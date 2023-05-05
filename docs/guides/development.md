@@ -5,11 +5,11 @@ page_title: "Development"
 # Development
 
 ## Pre-requisites
-- [Go](https://golang.org/) 1.16 or later
+
+- [Go](https://golang.org/) 1.19 or later
 - [Terraform](https://www.terraform.io/) v0.13 or later
 - [Healthchecks.io](https://healthchecks.io/) account and an API key
-- [goreleaser](https://goreleaser.com/) 0.162.0
-
+- [goreleaser](https://goreleaser.com/) 1.4.1
 
 ## Help
 
@@ -46,6 +46,7 @@ Most commands can also be executed using docker. Simply run the commands like be
 ```
 
 ## Running integration tests
+
 **NOTE**: Depends on the output of the build command
 
 ```bash
@@ -54,6 +55,7 @@ Most commands can also be executed using docker. Simply run the commands like be
 ```
 
 ## Running examples
+
 **NOTE**: Depends on the output of the build command
 
 ```bash
