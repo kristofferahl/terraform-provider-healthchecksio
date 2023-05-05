@@ -1,7 +1,7 @@
 package healthchecksio
 
 import (
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 // Provider creates a new healthchecksio provider

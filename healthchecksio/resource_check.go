@@ -5,7 +5,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/kristofferahl/go-healthchecksio"
 )
 
@@ -131,21 +131,35 @@ func resourceHealthcheckRead(d *schema.ResourceData, m interface{}) error {
 		return nil
 	}
 
-	d.Set("name", healthcheck.Name)
+	tags := make([]string, 0)
 	if len(healthcheck.Tags) > 0 {
-		d.Set("tags", strings.Split(healthcheck.Tags, " "))
-	} else {
-		d.Set("tags", make([]string, 0))
+		tags = strings.Split(healthcheck.Tags, " ")
 	}
-	d.Set("timeout", healthcheck.Timeout)
-	d.Set("grace", healthcheck.Grace)
-	d.Set("schedule", healthcheck.Schedule)
-	d.Set("timezone", healthcheck.Timezone)
-	d.Set("channels", healthcheck.Channels)
-	d.Set("ping_url", healthcheck.PingURL)
-	d.Set("pause_url", healthcheck.PauseURL)
-	d.Set("desc", healthcheck.Description)
-	d.Set("methods", healthcheck.Methods)
+
+	channels := make([]string, 0)
+	if len(healthcheck.Channels) > 0 {
+		channels = strings.Split(healthcheck.Channels, " ")
+	}
+
+	values := map[string]interface{}{
+		"name":      healthcheck.Name,
+		"tags":      tags,
+		"timeout":   healthcheck.Timeout,
+		"grace":     healthcheck.Grace,
+		"schedule":  healthcheck.Schedule,
+		"timezone":  healthcheck.Timezone,
+		"channels":  channels,
+		"ping_url":  healthcheck.PingURL,
+		"pause_url": healthcheck.PauseURL,
+		"desc":      healthcheck.Description,
+		"methods":   healthcheck.Methods,
+	}
+
+	for k, v := range values {
+		if err := d.Set(k, v); err != nil {
+			return err
+		}
+	}
 
 	return nil
 }
