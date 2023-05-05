@@ -20,39 +20,39 @@ func resourceHealthcheck() *schema.Resource {
 		},
 
 		Schema: map[string]*schema.Schema{
-			"name": &schema.Schema{
+			"name": {
 				Type:        schema.TypeString,
 				Description: "Name of the check",
 				Required:    true,
 			},
-			"tags": &schema.Schema{
+			"tags": {
 				Type:        schema.TypeList,
 				Description: "Tags associated with the check",
 				Optional:    true,
 				Elem:        &schema.Schema{Type: schema.TypeString},
 			},
-			"timeout": &schema.Schema{
+			"timeout": {
 				Type:        schema.TypeInt,
 				Description: "Timeout period of the check",
 				Optional:    true,
 			},
-			"grace": &schema.Schema{
+			"grace": {
 				Type:        schema.TypeInt,
 				Description: "Grace period for the check",
 				Optional:    true,
 				Default:     3600,
 			},
-			"schedule": &schema.Schema{
+			"schedule": {
 				Type:        schema.TypeString,
 				Description: "A cron expression defining the check's schedule",
 				Optional:    true,
 			},
-			"timezone": &schema.Schema{
+			"timezone": {
 				Type:        schema.TypeString,
 				Description: "Timezone used for the schedule",
 				Optional:    true,
 			},
-			"channels": &schema.Schema{
+			"channels": {
 				Type: schema.TypeList,
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
@@ -60,22 +60,22 @@ func resourceHealthcheck() *schema.Resource {
 				Description: "Channels integrated with the check",
 				Optional:    true,
 			},
-			"ping_url": &schema.Schema{
+			"ping_url": {
 				Type:        schema.TypeString,
 				Description: "Ping URL associated with this check",
 				Computed:    true,
 			},
-			"pause_url": &schema.Schema{
+			"pause_url": {
 				Type:        schema.TypeString,
 				Description: "Pause URL associated with this check",
 				Computed:    true,
 			},
-			"desc": &schema.Schema{
+			"desc": {
 				Type:        schema.TypeString,
 				Description: "Description of the check",
 				Optional:    true,
 			},
-			"methods": &schema.Schema{
+			"methods": {
 				Type:        schema.TypeString,
 				Description: "Allowed HTTP methods for making ping requests",
 				Optional:    true,
@@ -92,14 +92,14 @@ func resourceHealthcheckCreate(d *schema.ResourceData, m interface{}) error {
 
 	healthcheck, err := createHealthcheckFromResourceData(d)
 	if err != nil {
-		return fmt.Errorf("Failed to prepare healthcheck from resource data: %s", err)
+		return fmt.Errorf("failed to prepare healthcheck from resource data: %s", err)
 	}
 
 	log.Printf("[DEBUG] healthcheck create: %#v", healthcheck)
 
 	resp, err := client.Create(*healthcheck)
 	if err != nil {
-		return fmt.Errorf("Failed to create healthcheck: %s", err)
+		return fmt.Errorf("failed to create healthcheck: %s", err)
 	}
 
 	d.SetId(resp.ID())
@@ -115,7 +115,7 @@ func resourceHealthcheckRead(d *schema.ResourceData, m interface{}) error {
 
 	healthchecks, err := client.GetAll()
 	if err != nil {
-		return fmt.Errorf("Error reading healthchecks: %s", err)
+		return fmt.Errorf("error reading healthchecks: %s", err)
 	}
 
 	var healthcheck *healthchecksio.HealthcheckResponse
@@ -172,7 +172,7 @@ func resourceHealthcheckUpdate(d *schema.ResourceData, m interface{}) error {
 
 	healthcheck, err := createHealthcheckFromResourceData(d)
 	if err != nil {
-		return fmt.Errorf("Failed to prepare healthcheck from resource data: %s", err)
+		return fmt.Errorf("failed to prepare healthcheck from resource data: %s", err)
 	}
 
 	log.Printf("[DEBUG] healthcheck update: %#v", healthcheck)
@@ -180,7 +180,7 @@ func resourceHealthcheckUpdate(d *schema.ResourceData, m interface{}) error {
 	if hasChange(d) {
 		_, err = client.Update(key, *healthcheck)
 		if err != nil {
-			return fmt.Errorf("Failed to update healthcheck: %s", err)
+			return fmt.Errorf("failed to update healthcheck: %s", err)
 		}
 	}
 
@@ -194,7 +194,7 @@ func resourceHealthcheckDelete(d *schema.ResourceData, m interface{}) error {
 	log.Printf("[INFO] Deleting healthcheck with key: %s", key)
 
 	if _, err := client.Delete(key); err != nil {
-		return fmt.Errorf("Error deleting healthcheck: %s", err)
+		return fmt.Errorf("error deleting healthcheck: %s", err)
 	}
 
 	return nil

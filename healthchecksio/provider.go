@@ -8,13 +8,13 @@ import (
 func Provider() *schema.Provider {
 	return &schema.Provider{
 		Schema: map[string]*schema.Schema{
-			"api_key": &schema.Schema{
+			"api_key": {
 				Type:        schema.TypeString,
 				Required:    true,
 				DefaultFunc: schema.EnvDefaultFunc(APIKeyEnvName, nil),
 				Description: "A healthchecks.io api key.",
 			},
-			"api_url": &schema.Schema{
+			"api_url": {
 				Type:        schema.TypeString,
 				Optional:    true,
 				DefaultFunc: schema.EnvDefaultFunc(APIURLEnvName, ""),

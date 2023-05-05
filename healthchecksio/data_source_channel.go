@@ -13,17 +13,17 @@ func dataSourceHealthcheckChannel() *schema.Resource {
 		Read: dataSourceHealthcheckChannelRead,
 
 		Schema: map[string]*schema.Schema{
-			"id": &schema.Schema{
+			"id": {
 				Type:        schema.TypeString,
 				Description: "ID of the channel",
 				Computed:    true,
 			},
-			"name": &schema.Schema{
+			"name": {
 				Type:        schema.TypeString,
 				Description: "Name of the channel to search for",
 				Optional:    true,
 			},
-			"kind": &schema.Schema{
+			"kind": {
 				Type:        schema.TypeString,
 				Description: "Kind of channel",
 				Required:    true,
@@ -41,7 +41,7 @@ func dataSourceHealthcheckChannelRead(d *schema.ResourceData, m interface{}) err
 
 	channels, err := client.GetAllChannels()
 	if err != nil {
-		return fmt.Errorf("Error reading healthchecks: %s", err)
+		return fmt.Errorf("error reading healthchecks: %s", err)
 	}
 
 	var channel *healthchecksio.HealthcheckChannelResponse

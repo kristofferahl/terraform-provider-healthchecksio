@@ -12,4 +12,12 @@ resource "healthchecksio_check" "extended" {
   grace    = 120 # seconds
   schedule = "0,30 2 * * *"
   timezone = "Europe/Stockholm"
+
+  channels = [
+    data.healthchecksio_channel.email.id
+  ]
+}
+
+data "healthchecksio_channel" "email" {
+  kind = "email"
 }
