@@ -202,22 +202,24 @@ main() {
   local command="${1:-}"
   shift || true
 
-  git config core.hooksPath .githooks
+  if [[ ${CI:-false} != true ]]; then
+    git config core.hooksPath .githooks
+  fi
 
   export PROVIDER_VERSION
   [[ -f ./provider-version ]] && PROVIDER_VERSION="$(cat ./provider-version)"
 
   case "${command}" in
-    create-provider-version) run_create_provider_version "$@" ;;
-    build) run_build "$@" ;;
-    docker) run_docker "${TERRAFORM_VERSION:?}" "$@" ;;
-    examples) run_examples "$@" ;;
-    test) run_test "$@" ;;
-    test-integration) run_test_integration "$@" ;;
-    prepare-release) run_prepare_release "$@" ;;
-    release) run_release "$@" ;;
-    help) run_help ;;
-    *) run_help ;;
+  create-provider-version) run_create_provider_version "$@" ;;
+  build) run_build "$@" ;;
+  docker) run_docker "${TERRAFORM_VERSION:?}" "$@" ;;
+  examples) run_examples "$@" ;;
+  test) run_test "$@" ;;
+  test-integration) run_test_integration "$@" ;;
+  prepare-release) run_prepare_release "$@" ;;
+  release) run_release "$@" ;;
+  help) run_help ;;
+  *) run_help ;;
   esac
 }
 
