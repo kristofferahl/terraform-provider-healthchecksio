@@ -16,58 +16,49 @@ jobs:
   build-test-release:
     runs-on: ubuntu-latest
     steps:
-      -
-        name: Checkout
+      - name: Checkout
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      -
-        name: Set up Go
+      - name: Set up Go
         uses: actions/setup-go@v2
         with:
-          go-version: 1.16
-      -
-        name: Set up Goreleaser
+          go-version: 1.19
+      - name: Set up Goreleaser
         run: |
           mkdir -p "${TMPDIR:?}"
           curl -sL https://git.io/goreleaser | bash -s -- --version
         env:
           TMPDIR: ${{ github.workspace }}/bin
-          VERSION: v0.162.0
-      -
-        name: Import GPG key
+          VERSION: v1.4.1
+      - name: Import GPG key
         id: import_gpg
         uses: paultyng/ghaction-import-gpg@v2.1.0
         if: env.GPG_PRIVATE_KEY != '' && env.PASSPHRASE != ''
         env:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
           PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-      -
-        name: Build and sign
+      - name: Build and sign
         run: ./run build --sign
         if: steps.import_gpg.outputs.fingerprint != ''
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GORELEASER_BIN: ${{ github.workspace }}/bin/goreleaser
           GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
-      -
-        name: Build
+      - name: Build
         run: ./run build
         if: steps.import_gpg.outputs.fingerprint == ''
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GORELEASER_BIN: ${{ github.workspace }}/bin/goreleaser
-      -
-        name: Test
+      - name: Test
         run: ./run test
-      -
-        name: Intergration Test
+      - name: Intergration Test
         run: ./run docker test-integration
         if: env.HEALTHCHECKSIO_API_KEY != ''
         env:
           HEALTHCHECKSIO_API_KEY: ${{ secrets.HEALTHCHECKSIO_API_KEY }}
-      -
-        name: Release on valid tag
+      - name: Release on valid tag
         if: github.repository == 'kristofferahl/terraform-provider-healthchecksio' && startsWith(github.ref, 'refs/tags/v')
         run: ./run release
         env:
