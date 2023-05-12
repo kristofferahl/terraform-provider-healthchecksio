@@ -137,13 +137,14 @@ run_examples() {
   for d in ${examples_dir:?}/**; do
     if [[ -d "${d}" ]]; then
       [[ "$(basename "${d:?}")" != "${example}" && "${example}" != "" ]] && continue
+      [[ "${example}" == "" && "$(basename "${d:?}")" == "self-hosted" ]] && continue
 
       log INF "Example: $(basename "${d:?}") (${d:?})"
 
       install_plugin "${d:?}"
       cd "${d:?}" || exit 1
 
-      generate_provider_config_file
+      [[ "$(basename "${d:?}")" != "self-hosted" ]] && generate_provider_config_file
 
       terraform init
       terraform apply
