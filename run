@@ -146,7 +146,7 @@ run_examples() {
 
       [[ "$(basename "${d:?}")" != "self-hosted" ]] && generate_provider_config_file
 
-      terraform init
+      terraform init -upgrade
       terraform apply
     fi
   done
@@ -173,7 +173,7 @@ run_test_integration() {
 
       generate_provider_config_file
 
-      terraform init
+      terraform init -upgrade
       terraform apply -auto-approve
       if [[ ${CI:-false} != true ]]; then
         echo "PRESS ENTER TO CONTINUE..."
