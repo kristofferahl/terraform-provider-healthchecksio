@@ -3,6 +3,7 @@ package healthchecksio
 import (
 	"fmt"
 	"log"
+	"sort"
 	"strings"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -138,7 +139,12 @@ func resourceHealthcheckRead(d *schema.ResourceData, m interface{}) error {
 
 	channels := make([]string, 0)
 	if len(healthcheck.Channels) > 0 {
-		channels = strings.Split(healthcheck.Channels, " ")
+		channels = strings.Split(healthcheck.Channels, ",")
+
+		if attr, ok := d.GetOk("channels"); ok {
+			state := toSliceOfString(attr.([]interface{}))
+			channels = sortByLeft(state, channels)
+		}
 	}
 
 	values := map[string]interface{}{
@@ -259,4 +265,34 @@ func hasChange(d *schema.ResourceData) bool {
 	return d.HasChange("desc") || d.HasChange("tags") || d.HasChange("timeout") ||
 		d.HasChange("grace") || d.HasChange("schedule") || d.HasChange("methods") ||
 		d.HasChange("timezone") || d.HasChange("channels") || d.HasChange("name")
+}
+
+func sortByLeft(left, right []string) []string {
+	var sorted []string
+	var diff []string
+
+	for _, i := range left {
+		if contains(right, i) && !contains(sorted, i) {
+			sorted = append(sorted, i)
+		}
+	}
+
+	for _, i := range right {
+		if !contains(sorted, i) && !contains(diff, i) {
+			diff = append(diff, i)
+		}
+	}
+
+	sorted = append(sorted, sort.StringSlice(diff)...)
+
+	return sorted
+}
+
+func contains(s []string, e string) bool {
+	for _, a := range s {
+		if a == e {
+			return true
+		}
+	}
+	return false
 }
