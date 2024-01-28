@@ -10,7 +10,7 @@
 # in `goreleaser` to indicate this is being used in a non-interactive mode.
 #
 name: CI
-on: [push, pull_request]
+on: [push, pull_request, workflow_dispatch]
 
 jobs:
   build-test-release:
