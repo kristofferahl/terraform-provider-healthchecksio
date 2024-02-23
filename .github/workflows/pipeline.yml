@@ -17,11 +17,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Set up Go
-        uses: actions/setup-go@v4
+        uses: actions/setup-go@v5
         with:
           go-version: 1.19
       - name: Set up Goreleaser
@@ -54,7 +54,7 @@ jobs:
       - name: Test
         run: ./run test
       - name: Intergration Test
-        run: ./run docker test-integration
+        run: ./run dev test-integration
         if: env.HEALTHCHECKSIO_API_KEY != ''
         env:
           HEALTHCHECKSIO_API_KEY: ${{ secrets.HEALTHCHECKSIO_API_KEY }}

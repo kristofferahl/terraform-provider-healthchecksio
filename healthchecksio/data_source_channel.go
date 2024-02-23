@@ -5,7 +5,7 @@ import (
 	"log"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"github.com/kristofferahl/go-healthchecksio"
+	"github.com/kristofferahl/go-healthchecksio/v2"
 )
 
 func dataSourceHealthcheckChannel() *schema.Resource {
