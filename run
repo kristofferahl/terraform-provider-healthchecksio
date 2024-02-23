@@ -70,6 +70,7 @@ run_help() {
 
 commands:
   build               Build the provider
+  dev                 Run a command in dev mode (example: ./run dev examples full)
   docker              Run a command in docker (example: ./run docker test)
   examples            Run examples
   test                Run tests
@@ -127,6 +128,33 @@ run_release() {
   ${GORELEASER_BIN:?} --rm-dist
 }
 
+run_dev() {
+  log WAR 'Running in dev mode...'
+
+  log INF "Building provider..."
+  go build .
+
+  log INF "Generating provider install instructions..."
+  echo "provider_installation {
+  dev_overrides {
+    \"registry.terraform.io/kristofferahl/healthchecksio\" = \"${PWD:?}\"
+  }
+  direct {}
+}" >dev.tfrc
+
+  export TF_CLI_CONFIG_FILE=${PWD:?}/dev.tfrc
+  log INF "Set TF_CLI_CONFIG_FILE=${TF_CLI_CONFIG_FILE:?}"
+
+  local command="${1:-}"
+  shift || true
+
+  case "${command}" in
+  examples) run_examples "$@" ;;
+  test-integration) run_test_integration "$@" ;;
+  *) log ERR "Unknown dev command: ${command}" && exit 1 ;;
+  esac
+}
+
 run_examples() {
   [ "${HEALTHCHECKSIO_API_KEY:?'Environment variable "HEALTHCHECKSIO_API_KEY" is required'}" ]
 
@@ -141,7 +169,6 @@ run_examples() {
 
       log INF "Example: $(basename "${d:?}") (${d:?})"
 
-      install_plugin "${d:?}"
       cd "${d:?}" || exit 1
 
       [[ "$(basename "${d:?}")" != "self-hosted" ]] && generate_provider_config_file
@@ -168,7 +195,6 @@ run_test_integration() {
 
       rm -rf "${d:?}/terraform.tfstate" || true
       rm -rf "${d:?}/terraform.tfstate.backup" || true
-      install_plugin "${d:?}"
       cd "${d:?}" || exit 1
 
       generate_provider_config_file
@@ -214,6 +240,7 @@ main() {
   create-provider-version) run_create_provider_version "$@" ;;
   build) run_build "$@" ;;
   docker) run_docker "${TERRAFORM_VERSION:?}" "$@" ;;
+  dev) run_dev "$@" ;;
   examples) run_examples "$@" ;;
   test) run_test "$@" ;;
   test-integration) run_test_integration "$@" ;;

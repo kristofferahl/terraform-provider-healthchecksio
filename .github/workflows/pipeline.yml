@@ -54,7 +54,7 @@ jobs:
       - name: Test
         run: ./run test
       - name: Intergration Test
-        run: ./run docker test-integration
+        run: ./run dev test-integration
         if: env.HEALTHCHECKSIO_API_KEY != ''
         env:
           HEALTHCHECKSIO_API_KEY: ${{ secrets.HEALTHCHECKSIO_API_KEY }}

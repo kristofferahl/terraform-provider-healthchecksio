@@ -23,6 +23,19 @@ page_title: "Development"
 ./run <command> [<arg1> <arg2> ...]
 ```
 
+## Running commands - in dev mode
+
+This is useful to test the provider during development.
+Using `./run dev ...` will:
+
+- build the provider (go build .)
+- setup overrides for provider installation (see dev.tfrc)
+- run the command as specified
+
+```bash
+./run dev <command> [<arg1> <arg2> ...]
+```
+
 ## Running commands - in docker
 
 Most commands can also be executed using docker. Simply run the commands like below.
