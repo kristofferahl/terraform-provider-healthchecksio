@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.26.1
-	github.com/kristofferahl/go-healthchecksio v1.4.0
+	github.com/kristofferahl/go-healthchecksio/v2 v2.0.0
 )
 
 require (
