@@ -142,8 +142,9 @@ run_dev() {
   direct {}
 }" >dev.tfrc
 
+  log INF "Setting up environment..."
   export TF_CLI_CONFIG_FILE=${PWD:?}/dev.tfrc
-  log INF "Set TF_CLI_CONFIG_FILE=${TF_CLI_CONFIG_FILE:?}"
+  export SKIP_INIT=true
 
   local command="${1:-}"
   shift || true
@@ -173,7 +174,7 @@ run_examples() {
 
       [[ "$(basename "${d:?}")" != "self-hosted" ]] && generate_provider_config_file
 
-      terraform init -upgrade
+      [[ ${SKIP_INIT:-false} == false ]] && terraform init -upgrade
       terraform apply
     fi
   done
@@ -199,7 +200,7 @@ run_test_integration() {
 
       generate_provider_config_file
 
-      terraform init -upgrade
+      [[ ${SKIP_INIT:-false} == false ]] && terraform init -upgrade
       terraform apply -auto-approve
       if [[ ${CI:-false} != true ]]; then
         echo "PRESS ENTER TO CONTINUE..."
