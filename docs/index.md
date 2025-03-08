@@ -11,7 +11,7 @@ A provider used to manage [Healthchecks.io](https://healthchecks.io/) resources.
 ```hcl
 provider "healthchecksio" {
   api_key = var.healthchecksio_api_key
-  version = "~> 1.6.0"
+  version = "~> 2.1.0"
 }
 
 variable "healthchecksio_api_key" {
@@ -42,7 +42,7 @@ output "ping_url" {
 ## Argument Reference
 
 | Property | Description                 | Environment variable   | Type   | Required |
-|----------|-----------------------------|------------------------|--------|----------|
+| -------- | --------------------------- | ---------------------- | ------ | -------- |
 | api_key  | The healthchecks.io API Key | HEALTHCHECKSIO_API_KEY | string | true     |
 | api_url  | The healthchecks.io API URL | HEALTHCHECKSIO_API_URL | string | false    |
 
