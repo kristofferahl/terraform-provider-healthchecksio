@@ -37,11 +37,10 @@ jobs:
           terraform_version: "1.10.4"
       - name: Import GPG key
         id: import_gpg
-        uses: paultyng/ghaction-import-gpg@v2.1.0
-        if: env.GPG_PRIVATE_KEY != '' && env.PASSPHRASE != ''
-        env:
-          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-          PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+        uses: crazy-max/ghaction-import-gpg@v6
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }}
       - name: Build and sign
         run: ./run build --sign
         if: steps.import_gpg.outputs.fingerprint != ''
