@@ -31,6 +31,9 @@ jobs:
         env:
           TMPDIR: ${{ github.workspace }}/bin
           VERSION: v1.4.1
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.10.4"
       - name: Import GPG key
         id: import_gpg
         uses: paultyng/ghaction-import-gpg@v2.1.0
