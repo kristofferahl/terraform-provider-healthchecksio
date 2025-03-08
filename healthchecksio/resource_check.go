@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 	"github.com/kristofferahl/go-healthchecksio/v2"
 )
 
@@ -33,15 +34,18 @@ func resourceHealthcheck() *schema.Resource {
 				Elem:        &schema.Schema{Type: schema.TypeString},
 			},
 			"timeout": {
-				Type:        schema.TypeInt,
-				Description: "Timeout period of the check",
-				Optional:    true,
+				Type:         schema.TypeInt,
+				Description:  "Timeout period of the check",
+				Optional:     true,
+				Default:      86400,
+				ValidateFunc: validation.IntBetween(60, 31536000),
 			},
 			"grace": {
-				Type:        schema.TypeInt,
-				Description: "Grace period for the check",
-				Optional:    true,
-				Default:     3600,
+				Type:         schema.TypeInt,
+				Description:  "Grace period for the check",
+				Optional:     true,
+				Default:      3600,
+				ValidateFunc: validation.IntBetween(60, 31536000),
 			},
 			"schedule": {
 				Type:        schema.TypeString,
@@ -56,7 +60,8 @@ func resourceHealthcheck() *schema.Resource {
 			"channels": {
 				Type: schema.TypeList,
 				Elem: &schema.Schema{
-					Type: schema.TypeString,
+					Type:         schema.TypeString,
+					ValidateFunc: validation.IsUUID,
 				},
 				Description: "Channels integrated with the check",
 				Optional:    true,
@@ -77,9 +82,11 @@ func resourceHealthcheck() *schema.Resource {
 				Optional:    true,
 			},
 			"methods": {
-				Type:        schema.TypeString,
-				Description: "Allowed HTTP methods for making ping requests",
-				Optional:    true,
+				Type:         schema.TypeString,
+				Description:  "Allowed HTTP methods for making ping requests",
+				Optional:     true,
+				Default:      "",
+				ValidateFunc: validation.StringInSlice([]string{"", "POST"}, false),
 			},
 		},
 	}
