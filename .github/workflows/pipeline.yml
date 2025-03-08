@@ -31,7 +31,8 @@ jobs:
         env:
           TMPDIR: ${{ github.workspace }}/bin
           VERSION: v1.4.1
-      - uses: hashicorp/setup-terraform@v3
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: "1.10.4"
       - name: Import GPG key
