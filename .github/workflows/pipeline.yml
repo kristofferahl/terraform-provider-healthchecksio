@@ -30,7 +30,7 @@ jobs:
           curl -sL https://git.io/goreleaser | bash -s -- --version
         env:
           TMPDIR: ${{ github.workspace }}/bin
-          VERSION: v1.4.1
+          VERSION: v2.7.0
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v3
         with:

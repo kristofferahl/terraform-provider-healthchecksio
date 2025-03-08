@@ -9,7 +9,7 @@ page_title: "Development"
 - [Go](https://golang.org/) 1.19 or later
 - [Terraform](https://www.terraform.io/) v0.13 or later
 - [Healthchecks.io](https://healthchecks.io/) account and an API key
-- [goreleaser](https://goreleaser.com/) 1.4.1
+- [goreleaser](https://goreleaser.com/) 2.7.0
 
 ## Help
 

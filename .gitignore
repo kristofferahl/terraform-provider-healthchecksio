@@ -7,3 +7,4 @@ provider-version
 generated.tf
 dev.tfrc
 bin/
+!terraform-registry-manifest.json
