@@ -18,6 +18,31 @@ function log() {
   echo >&2 -e "${timestamp} [\033[1;94m${level}\033[0m] [$script_name] ${message}"
 }
 
+run_setup() {
+  install_goreleaser
+}
+
+install_goreleaser() {
+  export TMPDIR
+  export VERSION
+  TMPDIR=$(mktemp -d)
+  VERSION=v1.4.1
+
+  if [[ -f "${GORELEASER_BIN:?}" ]]; then
+    if ${GORELEASER_BIN:?} --version | grep -q "${VERSION:?}"; then
+      log INF "Goreleaser already installed"
+      return 0
+    else
+      log INF "Goreleaser already installed but version mismatch"
+    fi
+  fi
+
+  echo "Using temporary directory: ${TMPDIR:?}"
+  curl -sL https://git.io/goreleaser | bash -s -- --version
+  mkdir -p "./bin" &>/dev/null || true
+  mv "${TMPDIR:?}/goreleaser" "${GORELEASER_BIN:?}"
+}
+
 install_plugin() {
   local destination_dir="${1:?'A destination directory is required'}"
   local full_plugin_dir="${destination_dir:?}/${plugins_dir:?}/registry.terraform.io/kristofferahl/healthchecksio/${PROVIDER_VERSION:?}"
@@ -160,8 +185,13 @@ run_examples() {
   [ "${HEALTHCHECKSIO_API_KEY:?'Environment variable "HEALTHCHECKSIO_API_KEY" is required'}" ]
 
   local example="${1:-}"
+  shift
+  tf_args=("$@")
+  if [[ ${#tf_args[@]} -lt 1 ]]; then
+    tf_args+=('apply')
+  fi
 
-  log INF "Running example(s)..."
+  log INF "Running example(s)... terraform ${tf_args[*]}"
 
   for d in ${examples_dir:?}/**; do
     if [[ -d "${d}" ]]; then
@@ -175,7 +205,7 @@ run_examples() {
       [[ "$(basename "${d:?}")" != "self-hosted" ]] && generate_provider_config_file
 
       [[ ${SKIP_INIT:-false} == false ]] && terraform init -upgrade
-      terraform apply
+      terraform "${tf_args[@]:?}"
     fi
   done
 }
@@ -247,6 +277,7 @@ main() {
   test-integration) run_test_integration "$@" ;;
   prepare-release) run_prepare_release "$@" ;;
   release) run_release "$@" ;;
+  setup) run_setup "$@" ;;
   help) run_help ;;
   *) run_help ;;
   esac
