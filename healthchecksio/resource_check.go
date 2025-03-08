@@ -37,7 +37,6 @@ func resourceHealthcheck() *schema.Resource {
 				Type:         schema.TypeInt,
 				Description:  "Timeout period of the check",
 				Optional:     true,
-				Default:      86400,
 				ValidateFunc: validation.IntBetween(60, 31536000),
 			},
 			"grace": {
