@@ -1,6 +1,8 @@
 module github.com/kristofferahl/terraform-provider-healthchecksio
 
-go 1.19
+go 1.24
+
+toolchain go1.24.0
 
 require (
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.26.1
