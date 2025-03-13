@@ -13,6 +13,7 @@ func Provider() *schema.Provider {
 				Required:    true,
 				DefaultFunc: schema.EnvDefaultFunc(APIKeyEnvName, nil),
 				Description: "A healthchecks.io api key.",
+				Sensitive:   true,
 			},
 			"api_url": {
 				Type:        schema.TypeString,
