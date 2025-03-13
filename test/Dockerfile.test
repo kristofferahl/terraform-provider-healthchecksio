@@ -1,4 +1,4 @@
-FROM golang:1.19
+FROM golang:1.24
 ARG TERRAFORM_VERSION
 LABEL maintainer="Kristoffer Ahl <mail@77dynamite.com>"
 RUN apt-get update && apt-get install -y git bash openssl curl unzip

@@ -6,7 +6,7 @@ page_title: "Development"
 
 ## Pre-requisites
 
-- [Go](https://golang.org/) 1.19 or later
+- [Go](https://golang.org/) 1.24 or later
 - [Terraform](https://www.terraform.io/) v0.13 or later
 - [Healthchecks.io](https://healthchecks.io/) account and an API key
 - [goreleaser](https://goreleaser.com/) 2.7.0
