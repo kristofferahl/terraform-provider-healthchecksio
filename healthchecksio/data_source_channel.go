@@ -58,8 +58,12 @@ func dataSourceHealthcheckChannelRead(d *schema.ResourceData, m interface{}) err
 	}
 
 	d.SetId(channel.ID)
-	d.Set("name", channel.Name)
-	d.Set("kind", channel.Kind)
+	if err := d.Set("name", channel.Name); err != nil {
+		return err
+	}
+	if err := d.Set("kind", channel.Kind); err != nil {
+		return err
+	}
 
 	return nil
 }
