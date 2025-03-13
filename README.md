@@ -24,6 +24,7 @@ A provider used to manage [Healthchecks.io](https://healthchecks.io/) resources.
 - [acraftydev](https://github.com/acraftydev)
 - [pallxk](https://github.com/pallxk)
 - [Riscky](https://github.com/Riscky)
+- [kiyo-s](https://github.com/kiyo-s)
 
 **Contributions appreciated!**
 Open an issue to let us know if you're able to help out. All contributions are welcome!
