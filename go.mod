@@ -6,7 +6,7 @@ toolchain go1.24.0
 
 require (
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.36.1
-	github.com/kristofferahl/go-healthchecksio/v2 v2.0.0
+	github.com/kristofferahl/go-healthchecksio/v2 v2.1.0
 )
 
 require (

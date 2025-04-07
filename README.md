@@ -25,6 +25,7 @@ A provider used to manage [Healthchecks.io](https://healthchecks.io/) resources.
 - [pallxk](https://github.com/pallxk)
 - [Riscky](https://github.com/Riscky)
 - [kiyo-s](https://github.com/kiyo-s)
+- [SurDaft](https://github.com/surdaft)
 
 **Contributions appreciated!**
 Open an issue to let us know if you're able to help out. All contributions are welcome!
