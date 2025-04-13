@@ -1,5 +1,6 @@
 resource "healthchecksio_check" "extended" {
   name    = "test-extended-check"
+  slug    = "test-extended"
   desc    = "An extended check"
   methods = "POST"
 

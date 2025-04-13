@@ -3,6 +3,7 @@ package healthchecksio
 import (
 	"fmt"
 	"log"
+	"regexp"
 	"sort"
 	"strings"
 
@@ -26,6 +27,16 @@ func resourceHealthcheck() *schema.Resource {
 				Type:        schema.TypeString,
 				Description: "Name of the check",
 				Required:    true,
+			},
+			"slug": {
+				Type:        schema.TypeString,
+				Description: "Slug of the check",
+				Computed:    true,
+				Optional:    true,
+				ValidateFunc: validation.StringMatch(
+					regexp.MustCompile(`^[a-z0-9_-]+$`),
+					"must contain only lowercase letters, numbers, underscores, and hyphens",
+				),
 			},
 			"tags": {
 				Type:        schema.TypeList,
@@ -155,6 +166,7 @@ func resourceHealthcheckRead(d *schema.ResourceData, m interface{}) error {
 
 	values := map[string]interface{}{
 		"name":      healthcheck.Name,
+		"slug":      healthcheck.Slug,
 		"tags":      tags,
 		"timeout":   healthcheck.Timeout,
 		"grace":     healthcheck.Grace,
@@ -219,6 +231,12 @@ func createHealthcheckFromResourceData(d *schema.ResourceData) (*healthchecksio.
 		healthcheck.Name = attr.(string)
 	}
 
+	if attr, ok := d.GetOk("slug"); ok {
+		healthcheck.Slug = attr.(string)
+	} else {
+		healthcheck.Slug = generateSlugFromName(healthcheck.Name)
+	}
+
 	if attr, ok := d.GetOk("tags"); ok {
 		tags := toSliceOfString(attr.([]interface{}))
 		healthcheck.Tags = strings.Join(tags, " ")
@@ -270,7 +288,8 @@ func toSliceOfString(a []interface{}) []string {
 func hasChange(d *schema.ResourceData) bool {
 	return d.HasChange("desc") || d.HasChange("tags") || d.HasChange("timeout") ||
 		d.HasChange("grace") || d.HasChange("schedule") || d.HasChange("methods") ||
-		d.HasChange("timezone") || d.HasChange("channels") || d.HasChange("name")
+		d.HasChange("timezone") || d.HasChange("channels") || d.HasChange("name") ||
+		d.HasChange("slug")
 }
 
 func sortByLeft(left, right []string) []string {
@@ -301,4 +320,21 @@ func contains(s []string, e string) bool {
 		}
 	}
 	return false
+}
+
+// generateSlugFromName generates a slug from a name
+// all non-alphanumeric characters are replaced with a hyphen, ensuring no
+// double hyphens are present, and no trailing or leading hyphens.
+// @see https://healthchecks.io/docs/api/#create-check
+func generateSlugFromName(name string) string {
+	// generate slug from name
+	nonMatch := regexp.MustCompile(`[^a-z0-9_-]+`)
+	slug := nonMatch.ReplaceAllString(strings.ToLower(name), "-")
+
+	// fix potential double hyphens or end/start hyphens
+	manyHyphens := regexp.MustCompile(`-+`)
+	slug = strings.Trim(slug, "-")
+	slug = manyHyphens.ReplaceAllString(slug, "-")
+
+	return slug
 }

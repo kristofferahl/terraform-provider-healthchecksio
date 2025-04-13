@@ -1,6 +1,7 @@
 resource "healthchecksio_check" "test" {
   name = "test-check"
   desc = "A test check"
+  slug = "the-test-check"
 
   tags = [
     "go",
